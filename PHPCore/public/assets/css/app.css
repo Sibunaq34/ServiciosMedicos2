@@ -1,0 +1,236 @@
+:root {
+    --app-primary: #12375C;
+    --app-primary-dark: #0D2B47;
+    --app-primary-light: #EAF2F8;
+    --app-bg: #F5F7FA;
+    --app-text: #1F2937;
+    --app-border: #D6DEE8;
+}
+
+
+
+body {
+    min-height: 100vh;
+    background-color: var(--app-bg);
+    color: var(--app-text);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
+.app-navbar {
+    background-color: var(--app-primary);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.15rem;
+}
+
+.navbar .nav-link {
+    color: rgba(255,255,255,.85);
+    transition: color .2s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #ffffff;
+}
+
+
+
+.section-kicker {
+    color: var(--app-primary);
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    color: var(--app-text);
+}
+
+
+
+.card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 .35rem 1rem rgba(0,0,0,.08);
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid #ECEFF3;
+    font-weight: 600;
+}
+
+/* ==========================
+   Tablas
+========================== */
+
+.table {
+    margin-bottom: 0;
+}
+
+.table > :not(caption) > * > * {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+}
+
+.table thead th {
+    background: #F8F9FB;
+    color: #6B7280;
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+    white-space: nowrap;
+}
+
+.table tbody tr:hover {
+    background-color: #F8FBFD;
+}
+
+/* ==========================
+   Avatar
+========================== */
+
+.avatar {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--app-primary-light);
+    color: var(--app-primary);
+    font-weight: bold;
+}
+
+/* ==========================
+   Formularios
+========================== */
+
+.form-shell,
+.error-page {
+    max-width: 900px;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.form-control,
+.form-select {
+    border-color: var(--app-border);
+    border-radius: .6rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 .2rem rgba(18,55,92,.15);
+}
+
+/* ==========================
+   Botones
+========================== */
+
+.btn {
+    border-radius: .6rem;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--app-primary);
+    --bs-btn-border-color: var(--app-primary);
+    --bs-btn-hover-bg: var(--app-primary-dark);
+    --bs-btn-hover-border-color: var(--app-primary-dark);
+    --bs-btn-active-bg: var(--app-primary-dark);
+    --bs-btn-active-border-color: var(--app-primary-dark);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--app-primary);
+    --bs-btn-border-color: var(--app-primary);
+    --bs-btn-hover-bg: var(--app-primary);
+    --bs-btn-hover-border-color: var(--app-primary);
+}
+
+/* ==========================
+   Links
+========================== */
+
+.back-link {
+    color: #6B7280;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    color: var(--app-primary);
+}
+
+/* ==========================
+   Alertas
+========================== */
+
+.alert {
+    border: none;
+    border-radius: .75rem;
+}
+
+/* ==========================
+   Estados vacíos
+========================== */
+
+.empty-state {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.empty-icon,
+.delete-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    font-size: 1.7rem;
+    margin-bottom: 1rem;
+}
+
+.empty-icon {
+    background: var(--app-primary-light);
+    color: var(--app-primary);
+}
+
+.delete-icon {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+
+footer {
+    margin-top: 3rem;
+    padding: 1rem 0;
+    text-align: center;
+    color: #6B7280;
+}
+
+@media (max-width: 576px) {
+
+    .table > :not(caption) > * > * {
+        padding: .85rem;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .btn-lg {
+        font-size: 1rem;
+    }
+}
