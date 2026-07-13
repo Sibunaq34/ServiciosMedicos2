@@ -22,6 +22,8 @@
                 <a class="nav-link" href="<?= e(url('index')) ?>">Inicio</a>
                 <a class="nav-link" href="<?= e(url('detalle-oferente', ['id' => 1])) ?>">Detalle de Oferente</a>
                 <a class="nav-link" href="<?= e(url('crear-empleado', ['idOferente' => 1])) ?>">Crear Empleado</a>
+                <a class="nav-link" href="<?= e(url('oferentes')) ?>">Oferentes por Puesto</a>
+                <a class="nav-link" href="<?= e(url('listado-oferentes')) ?>">Listado de Oferentes</a>
             </div>
         </div>
     </nav>
