@@ -17,6 +17,11 @@ $action = filter_input(INPUT_GET, 'action') ?: 'index';
 try {
     match ($action) {
         'index' => $controller->index(),
+        // Rutas GET visuales de las historias asignadas.
+        'core9' => $controller->detalleOferente(),
+        'detalle-oferente' => $controller->detalleOferente(),
+        'core3' => $controller->crearEmpleado(),
+        'crear-empleado' => $controller->crearEmpleado(),
         default => $controller->notFound(),
     };
 } catch (Throwable $exception) {
