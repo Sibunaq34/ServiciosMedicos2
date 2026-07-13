@@ -234,3 +234,12 @@ footer {
         font-size: 1rem;
     }
 }
+
+.hero-panel { padding: 2.25rem; border: 1px solid var(--app-border); border-radius: 1.25rem; background: linear-gradient(135deg, #fff 0%, var(--app-primary-light) 100%); }
+.demo-pill { display: inline-flex; align-items: center; padding: .7rem 1rem; color: var(--app-primary); background: #fff; border: 1px solid var(--app-border); border-radius: 999px; font-weight: 600; }
+.story-card { transition: transform .2s ease, box-shadow .2s ease; }
+.story-card:hover { transform: translateY(-3px); box-shadow: 0 .65rem 1.5rem rgba(18,55,92,.13); }
+.story-icon { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: .8rem; background: var(--app-primary-light); color: var(--app-primary); font-size: 1.35rem; }
+.person-link { color: var(--app-primary); font-weight: 650; text-decoration: none; }
+.person-link:hover { text-decoration: underline; }
+.status-dot { display: inline-block; width: .5rem; height: .5rem; margin-right: .45rem; border-radius: 50%; background: #22c55e; }
