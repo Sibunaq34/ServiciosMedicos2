@@ -46,16 +46,16 @@ $aut3_id_formulario = 'aut3-' . wp_unique_id();
                 <label for="<?php echo esc_attr($aut3_id_formulario); ?>-tipo-identificacion">Tipo de identificaci&oacute;n</label>
                 <select id="<?php echo esc_attr($aut3_id_formulario); ?>-tipo-identificacion" name="tipo_identificacion" required aria-describedby="<?php echo esc_attr($aut3_id_formulario); ?>-error-tipo-identificacion">
                     <option value="">Seleccione</option>
-                    <option value="cedula_identidad">C&eacute;dula de identidad</option>
-                    <option value="dimex">DIMEX</option>
-                    <option value="pasaporte">Pasaporte</option>
+                    <option value="CedulaIdentidad">C&eacute;dula de identidad</option>
+                    <option value="DIMEX">DIMEX</option>
+                    <option value="Pasaporte">Pasaporte</option>
                 </select>
                 <p id="<?php echo esc_attr($aut3_id_formulario); ?>-error-tipo-identificacion" class="aut3-error" data-error-for="tipo_identificacion" aria-live="polite"></p>
             </div>
 
             <div class="aut3-field aut3-field-full">
                 <label for="<?php echo esc_attr($aut3_id_formulario); ?>-nombre-completo">Nombre completo</label>
-                <input id="<?php echo esc_attr($aut3_id_formulario); ?>-nombre-completo" name="nombre_completo" type="text" autocomplete="name" required aria-describedby="<?php echo esc_attr($aut3_id_formulario); ?>-error-nombre-completo">
+                <input id="<?php echo esc_attr($aut3_id_formulario); ?>-nombre-completo" name="nombre_completo" type="text" autocomplete="name" maxlength="150" required aria-describedby="<?php echo esc_attr($aut3_id_formulario); ?>-error-nombre-completo">
                 <p id="<?php echo esc_attr($aut3_id_formulario); ?>-error-nombre-completo" class="aut3-error" data-error-for="nombre_completo" aria-live="polite"></p>
             </div>
 
