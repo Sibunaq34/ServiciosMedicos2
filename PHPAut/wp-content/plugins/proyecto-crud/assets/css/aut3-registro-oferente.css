@@ -1,0 +1,184 @@
+/*
+ * Persona C - Kenneth
+ * Estructura base del formulario AUT3.
+ */
+.aut3-registro-oferente {
+    box-sizing: border-box;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.aut3-registro-oferente *,
+.aut3-registro-oferente *::before,
+.aut3-registro-oferente *::after {
+    box-sizing: border-box;
+}
+
+.aut3-card {
+    border: 1px solid currentColor;
+    border-radius: 8px;
+    padding: clamp(1rem, 3vw, 2rem);
+    background: Canvas;
+}
+
+.aut3-header {
+    margin-bottom: 1.5rem;
+}
+
+.aut3-kicker {
+    margin: 0 0 .25rem;
+    font-size: .875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.aut3-header h2 {
+    margin: 0;
+}
+
+.aut3-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.aut3-field,
+.aut3-actions {
+    min-width: 0;
+}
+
+.aut3-field-full,
+.aut3-actions {
+    grid-column: 1 / -1;
+}
+
+.aut3-field label {
+    display: block;
+    margin-bottom: .35rem;
+    font-weight: 600;
+}
+
+.aut3-field input,
+.aut3-field select,
+.aut3-field textarea {
+    width: 100%;
+    min-height: 2.75rem;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    padding: .65rem .75rem;
+    font: inherit;
+    background: Canvas;
+    color: CanvasText;
+}
+
+.aut3-field input[readonly] {
+    opacity: .8;
+}
+
+.aut3-field textarea {
+    resize: vertical;
+}
+
+.aut3-help,
+.aut3-error {
+    margin: .35rem 0 0;
+    font-size: .9rem;
+}
+
+.aut3-help {
+    opacity: .75;
+}
+
+.aut3-error {
+    min-height: 1.2em;
+    color: #b42318;
+}
+
+.aut3-field [aria-invalid="true"] {
+    border-color: #b42318;
+}
+
+.aut3-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75rem;
+    margin-top: .5rem;
+}
+
+.aut3-button {
+    min-height: 2.75rem;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    padding: .65rem 1rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.aut3-button-primary {
+    background: CanvasText;
+    color: Canvas;
+}
+
+.aut3-button-secondary {
+    background: Canvas;
+    color: CanvasText;
+}
+
+.aut3-modal[hidden] {
+    display: none;
+}
+
+.aut3-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+}
+
+.aut3-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+}
+
+.aut3-modal-dialog {
+    position: relative;
+    width: min(100%, 420px);
+    border-radius: 8px;
+    padding: 1.5rem;
+    background: Canvas;
+    color: CanvasText;
+    text-align: center;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .24);
+}
+
+.aut3-modal-dialog p {
+    margin: 0 0 1rem;
+    font-weight: 600;
+}
+
+/*
+ * Persona C - Kenneth
+ * Ajuste responsivo del formulario AUT3.
+ */
+@media (max-width: 720px) {
+    .aut3-registro-oferente {
+        padding: .75rem;
+    }
+
+    .aut3-form {
+        grid-template-columns: 1fr;
+    }
+
+    .aut3-actions {
+        flex-direction: column;
+    }
+
+    .aut3-button {
+        width: 100%;
+    }
+}
