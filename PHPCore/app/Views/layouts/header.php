@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?= e($title ?? 'Personas') ?> | PHP + PDO</title>
+        <title><?= e($title ?? 'Servicios Médicos') ?> | Servicios Médicos</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
             crossorigin="anonymous">
@@ -18,9 +18,12 @@
                 Servicios Médicos
             </a>
 
-            <div class="navbar-nav ms-auto">
+            <div class="navbar-nav ms-auto flex-row gap-3">
                 <a class="nav-link" href="<?= e(url('index')) ?>">Inicio</a>
-                <a class="nav-link" href="<?= e(url('create')) ?>">Agregar Persona</a>
+                <a class="nav-link" href="<?= e(url('detalle-oferente', ['id' => 1])) ?>">Detalle de Oferente</a>
+                <a class="nav-link" href="<?= e(url('crear-empleado', ['idOferente' => 1])) ?>">Crear Empleado</a>
+                <a class="nav-link" href="<?= e(url('oferentes')) ?>">Oferentes por Puesto</a>
+                <a class="nav-link" href="<?= e(url('listado-oferentes')) ?>">Listado de Oferentes</a>
             </div>
         </div>
     </nav>
