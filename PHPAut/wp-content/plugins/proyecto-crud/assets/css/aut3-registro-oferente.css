@@ -101,9 +101,16 @@
 
 .aut3-actions {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
     gap: .75rem;
     margin-top: .5rem;
+}
+
+.aut3-server-message {
+    flex: 1 1 auto;
+    margin: 0;
+    color: #b42318;
 }
 
 .aut3-button {
@@ -176,6 +183,7 @@
 
     .aut3-actions {
         flex-direction: column;
+        align-items: stretch;
     }
 
     .aut3-button {
