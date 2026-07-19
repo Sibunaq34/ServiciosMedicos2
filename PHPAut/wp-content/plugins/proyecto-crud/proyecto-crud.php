@@ -12,6 +12,9 @@ if (!defined('ABSPATH')) {
 
 require_once plugin_dir_path(__FILE__) . 'includes/config/ConexionBD.php';
 require_once plugin_dir_path(__FILE__) . 'includes/repository/BitacoraRepository.php';
+require_once plugin_dir_path(__FILE__) . 'includes/repository/RegistroOferenteRepository.php';
+require_once plugin_dir_path(__FILE__) . 'includes/services/RegistroOferenteService.php';
+require_once plugin_dir_path(__FILE__) . 'includes/controllers/RegistroOferenteController.php';
 
 add_shortcode('bitacoras', 'mostrarBitacoras');
 
@@ -28,16 +31,24 @@ function mostrarBitacoras()
 }
 
 // Persona C - Kenneth
-// Inicio de la integracion visual de AUT3.
+// Inicio de la integracion funcional de AUT3.
 const AUT3_REGISTRO_OFERENTE_VERSION = '0.1.0';
 
 add_shortcode('registro_oferente_aut3', 'aut3_registro_oferente_shortcode');
+add_action('wp_ajax_nopriv_aut3_registrar_oferente', 'aut3_registro_oferente_manejar_ajax');
+add_action('wp_ajax_aut3_registrar_oferente', 'aut3_registro_oferente_manejar_ajax');
+
+function aut3_registro_oferente_manejar_ajax()
+{
+    $controller = new RegistroOferenteController();
+    $controller->registrar();
+}
 
 function aut3_registro_oferente_shortcode()
 {
     aut3_registro_oferente_enqueue_assets();
 
-    $aut3_datos_puesto = aut3_registro_oferente_obtener_puesto_temporal();
+    $aut3_datos_puesto = aut3_registro_oferente_obtener_puesto();
     $aut3_url_retorno = aut3_registro_oferente_obtener_url_retorno();
 
     ob_start();
@@ -63,13 +74,21 @@ function aut3_registro_oferente_enqueue_assets()
         AUT3_REGISTRO_OFERENTE_VERSION,
         true
     );
+
+    wp_localize_script(
+        'aut3-registro-oferente',
+        'AUT3RegistroOferente',
+        [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('aut3_registro_oferente'),
+        ]
+    );
 }
 
-function aut3_registro_oferente_obtener_puesto_temporal()
+function aut3_registro_oferente_obtener_puesto()
 {
     // Persona C - Kenneth
-    // Integracion temporal con AUT2.
-    // Reemplazar cuando AUT2 defina el contrato definitivo.
+    // Revalida el puesto recibido desde AUT2.
     $codigoPuesto = isset($_GET['codigo_puesto'])
         ? sanitize_text_field(wp_unslash($_GET['codigo_puesto']))
         : '';
@@ -81,13 +100,29 @@ function aut3_registro_oferente_obtener_puesto_temporal()
     if ($codigoPuesto === '' && $nombrePuesto === '') {
         return [
             'codigo' => '',
-            'nombre' => 'Puesto pendiente de integracion con AUT2',
+            'nombre' => 'Seleccione un puesto disponible desde AUT2',
         ];
+    }
+
+    if ($codigoPuesto !== '') {
+        try {
+            $service = new RegistroOferenteService();
+            $puesto = $service->obtenerPuestoActivo($codigoPuesto);
+
+            if ($puesto) {
+                return [
+                    'codigo' => (string) $puesto['codigo_puesto'],
+                    'nombre' => (string) $puesto['nombre_puesto'],
+                ];
+            }
+        } catch (Throwable $e) {
+            error_log('aut3_registro_oferente_obtener_puesto: ' . $e->getMessage());
+        }
     }
 
     return [
         'codigo' => $codigoPuesto,
-        'nombre' => $nombrePuesto !== '' ? $nombrePuesto : $codigoPuesto,
+        'nombre' => 'Puesto no disponible',
     ];
 }
 
@@ -106,7 +141,7 @@ function aut3_registro_oferente_obtener_url_retorno()
     return esc_url(wp_validate_redirect($urlRetorno, $fallback));
 }
 // Persona C - Kenneth
-// Fin de la integracion visual de AUT3.
+// Fin de la integracion funcional de AUT3.
 
 // Aut2 - Listado de puestos disponibles.
 const AUT2_PUESTOS_DISPONIBLES_VERSION = '0.1.0';
