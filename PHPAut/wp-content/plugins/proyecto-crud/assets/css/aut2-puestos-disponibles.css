@@ -1,0 +1,51 @@
+.aut2-puestos-disponibles {
+    box-sizing: border-box;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+    font: inherit;
+}
+
+.aut2-puestos-disponibles *,
+.aut2-puestos-disponibles *::before,
+.aut2-puestos-disponibles *::after {
+    box-sizing: border-box;
+}
+
+.aut2-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.aut2-card {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+    padding: 1rem;
+    background: Canvas;
+    color: CanvasText;
+    text-decoration: none;
+    font: inherit;
+    transition: opacity .15s ease-in-out;
+}
+
+.aut2-card:hover,
+.aut2-card:focus-visible {
+    opacity: .8;
+}
+
+.aut2-card-nombre {
+    font-weight: 600;
+}
+
+.aut2-card-codigo {
+    font-size: .875rem;
+    opacity: .75;
+}
+
+.aut2-vacio {
+    opacity: .8;
+}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\HomeController;
 use App\Controllers\DetalleOferenteController;
-use App\Controllers\Oferentes_controller;
+use App\Controllers\OferentesController;
 use App\Core\Sesion;
 
 require __DIR__.'/app/bootstrap.php';
@@ -13,7 +13,7 @@ Sesion::start();
 
 $controller = new HomeController();
 $detalleOferenteController = new DetalleOferenteController();
-$oferentesController = new Oferentes_controller();
+$oferentesController = new OferentesController();
 
 $action = filter_input(INPUT_GET, 'action') ?: 'index';
 
