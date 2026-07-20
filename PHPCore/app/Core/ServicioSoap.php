@@ -8,7 +8,7 @@ use App\Config\WebService;
 use SoapClient;
 use SoapFault;
 
-final class SoapService
+final class ServicioSoap
 {
     private SoapClient $cliente;
 
