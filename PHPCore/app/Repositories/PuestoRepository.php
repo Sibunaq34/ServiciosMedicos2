@@ -28,18 +28,22 @@ final class PuestoRepository
         }
         return $puestos;
     }
+private function configuracion(): ?array
+{
+    $wsdl = defined(WebService::class . '::PUESTOS_WSDL')
+        ? constant(WebService::class . '::PUESTOS_WSDL')
+        : (
+            defined(WebService::class . '::PUESTOS')
+                ? constant(WebService::class . '::PUESTOS')
+                : null
+        );
 
-    private function configuracion(): ?array
-    {
-        $wsdl = defined(WebService::class.'::PUESTOS_WSDL')
-            ? constant(WebService::class.'::PUESTOS_WSDL')
-            : (defined(WebService::class.'::PUESTOS') ? constant(WebService::class.'::PUESTOS') : null);
-        $operacion = defined(WebService::class.'::PUESTOS_OPERACION')
-            ? constant(WebService::class.'::PUESTOS_OPERACION') : null;
-
-        return is_string($wsdl) && $wsdl !== '' && is_string($operacion) && $operacion !== ''
-            ? [$wsdl, $operacion] : null;
+    if (!is_string($wsdl) || $wsdl === '') {
+        return null;
     }
+
+    return [$wsdl, 'ListarPuestosActivos'];
+}
 
     private function lista(mixed $respuesta): array
     {

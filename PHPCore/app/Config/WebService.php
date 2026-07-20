@@ -13,4 +13,7 @@ final class WebService
     // Persona C - Kenneth
     // Centraliza el WSDL utilizado por CORE8.
     public const DETALLE_OFERENTE = 'http://localhost:54784/ServicioDetalleOferente.svc?wsdl';
+
+    public const PUESTOS_WSDL = 'http://localhost:54784/ServicioPuestos.svc?wsdl';
+
 }
