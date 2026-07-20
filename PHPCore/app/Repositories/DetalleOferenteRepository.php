@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Config\WebService;
-use App\Core\SoapService;
+use App\Core\ServicioSoap;
 use SoapFault;
 use Throwable;
 
@@ -16,7 +16,7 @@ final class DetalleOferenteRepository
         // Persona C - Kenneth
         // Consulta el detalle del oferente mediante el servicio SOAP de CORE8.
         try {
-            $soap = new SoapService(WebService::DETALLE_OFERENTE);
+            $soap = new ServicioSoap(WebService::DETALLE_OFERENTE);
             $respuesta = $soap->call('ObtenerDetalleOferente', [
                 'idOferente' => $idOferente,
             ]);
