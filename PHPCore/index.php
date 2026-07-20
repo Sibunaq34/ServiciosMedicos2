@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\HomeController;
 use App\Controllers\DetalleOferenteController;
 use App\Controllers\OferentesController;
+use App\Controllers\ContratacionController;
 use App\Controllers\LoginController;
 use App\Controllers\PuestosController;
 use App\Controllers\ExpedientesController;
@@ -18,6 +19,7 @@ Sesion::start();
 $controller = new HomeController();
 $detalleOferenteController = new DetalleOferenteController();
 $oferentesController = new OferentesController();
+$contratacionController = new ContratacionController();
 $loginController = new LoginController();
 $puestosController = new PuestosController();
 $expedientesController = new ExpedientesController();
@@ -32,6 +34,8 @@ try {
 
     match ($action) {
         'index' => $controller->index(),
+        'core9' => $contratacionController->detalleOferente(),
+        'core3' => $contratacionController->crearEmpleado(),
         'login' => $loginController->mostrarLogin(),
         'procesar-login' => $loginController->procesarLogin(),
         'logout' => $loginController->logout(),
@@ -56,6 +60,10 @@ try {
         // Persona C - Kenneth
         // Ruta para consultar el detalle completo del oferente en CORE8.
         'detalle-oferente-core8' => $detalleOferenteController->detalle(),
+        'detalle-oferente', 'detalleOferente' =>
+            $contratacionController->detalleOferente(),
+        'crear-empleado' =>
+            $contratacionController->crearEmpleado(),
         'oferentes' => $oferentesController->oferentesPorPuesto(),
         'listado-oferentes' => $oferentesController->listadoOferentes(),
         default => $controller->notFound(),

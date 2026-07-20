@@ -12,7 +12,7 @@ final class OferenteRepository
     private ServicioSoap $soap;
 
     public function __construct()
-    {
+   {
         $this->soap = new ServicioSoap(WebService::OFERENTES);
     }
 
@@ -53,14 +53,7 @@ final class OferenteRepository
         );
     }
 
-    /**
-     * El WSDL envuelve el resultado en dos capas: "ListarXxxResult" y, dentro,
-     * "ArrayOfXxxDto" (ej. "OferenteCumplimientoDto"). SoapClient colapsa cada
-     * capa a un solo objeto (no arreglo) cuando contiene un único elemento, y
-     * la capa exterior queda como un objeto sin propiedades cuando no hay
-     * ninguna fila. Aquí se destapan ambas envolturas y se homogeniza siempre
-     * a un arreglo de arreglos asociativos (PascalCase, tal como lo define el DTO).
-     */
+
     private function normalizar(mixed $respuesta): array
     {
         if ($respuesta === null) {
