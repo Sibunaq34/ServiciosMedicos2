@@ -14,7 +14,7 @@ final class ServicioSoap
     public function __construct(string $wsdl)
     {
         $this->cliente = new SoapClient($wsdl, [
-            'trace' => false,
+            'trace' => true,
             'exceptions' => true,
             'cache_wsdl' => WSDL_CACHE_NONE,
             'connection_timeout' => 10,
