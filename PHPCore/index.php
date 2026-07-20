@@ -9,7 +9,6 @@ use App\Controllers\ContratacionController;
 use App\Controllers\LoginController;
 use App\Controllers\PuestosController;
 use App\Controllers\ExpedientesController;
-use App\Controllers\UsuariosController;
 use App\Core\Sesion;
 
 require __DIR__.'/app/bootstrap.php';
@@ -33,11 +32,6 @@ try {
         'expediente-crear' => (new ExpedientesController())->crear(),
         'expediente-consultar' => (new ExpedientesController())->consultar(),
         'expediente-editar' => (new ExpedientesController())->editar(),
-        'usuarios' => (new UsuariosController())->index(),
-        'usuarios-crear' => (new UsuariosController())->crear(),
-        'usuarios-consultar' => (new UsuariosController())->consultar(),
-        'usuarios-editar' => (new UsuariosController())->editar(),
-        'usuarios-estado' => (new UsuariosController())->cambiarEstado(),
         // Persona C - Kenneth
         // Ruta para consultar el detalle completo del oferente en CORE8.
         'detalle-oferente-core8' => (new DetalleOferenteController())->detalle(),

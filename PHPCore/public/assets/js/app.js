@@ -17,3 +17,13 @@ document.querySelectorAll('form[data-confirm]').forEach(form => {
     });
 });
 
+const sidebarOffcanvas = document.getElementById('sidebarOffcanvas');
+if (sidebarOffcanvas) {
+    const bsSidebar = bootstrap.Offcanvas.getOrCreateInstance(sidebarOffcanvas);
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', () => {
+            bsSidebar.hide();
+        });
+    });
+}
+
