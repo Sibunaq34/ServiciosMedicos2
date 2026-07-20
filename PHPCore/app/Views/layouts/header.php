@@ -29,6 +29,8 @@
                 </span>
                 <a class="nav-link" href="<?= e(url('index')) ?>">Inicio</a>
                 <a class="nav-link" href="<?= e(url('puestos')) ?>">Puestos</a>
+                <a class="nav-link" href="<?= e(url('expedientes')) ?>">Expedientes</a>
+                <a class="nav-link" href="<?= e(url('usuarios')) ?>">Usuarios</a>
                 <a class="nav-link" href="<?= e(url('detalle-oferente', ['id' => 1])) ?>">Detalle de Oferente</a>
                 <a class="nav-link" href="<?= e(url('crear-empleado', ['idOferente' => 1])) ?>">Crear Empleado</a>
                 <a class="nav-link" href="<?= e(url('oferentes')) ?>">Oferentes por Puesto</a>

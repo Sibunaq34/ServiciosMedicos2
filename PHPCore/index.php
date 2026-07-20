@@ -7,6 +7,8 @@ use App\Controllers\DetalleOferenteController;
 use App\Controllers\OferentesController;
 use App\Controllers\LoginController;
 use App\Controllers\PuestosController;
+use App\Controllers\ExpedientesController;
+use App\Controllers\UsuariosController;
 use App\Core\Sesion;
 
 require __DIR__.'/app/bootstrap.php';
@@ -18,16 +20,35 @@ $detalleOferenteController = new DetalleOferenteController();
 $oferentesController = new OferentesController();
 $loginController = new LoginController();
 $puestosController = new PuestosController();
+$expedientesController = new ExpedientesController();
+$usuariosController = new UsuariosController();
 
 $action = filter_input(INPUT_GET, 'action') ?: 'index';
 
 try {
+    if (!in_array($action, ['login', 'procesar-login'], true)) {
+        Sesion::requerirAutenticacion();
+    }
+
     match ($action) {
         'index' => $controller->index(),
         'login' => $loginController->mostrarLogin(),
         'procesar-login' => $loginController->procesarLogin(),
         'logout' => $loginController->logout(),
         'puestos' => $puestosController->index(),
+        'puestos-crear' => $puestosController->crear(),
+        'puestos-consultar' => $puestosController->consultar(),
+        'puestos-editar' => $puestosController->editar(),
+        'puestos-estado' => $puestosController->cambiarEstado(),
+        'expedientes' => $expedientesController->index(),
+        'expediente-crear' => $expedientesController->crear(),
+        'expediente-consultar' => $expedientesController->consultar(),
+        'expediente-editar' => $expedientesController->editar(),
+        'usuarios' => $usuariosController->index(),
+        'usuarios-crear' => $usuariosController->crear(),
+        'usuarios-consultar' => $usuariosController->consultar(),
+        'usuarios-editar' => $usuariosController->editar(),
+        'usuarios-estado' => $usuariosController->cambiarEstado(),
         'core9' => $controller->detalleOferente(),
         'detalle-oferente' => $controller->detalleOferente(),
         'core3' => $controller->crearEmpleado(),

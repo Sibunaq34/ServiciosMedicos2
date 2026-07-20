@@ -6,6 +6,7 @@ namespace App\Core;
 
 use SoapClient;
 use SoapFault;
+use RuntimeException;
 
 final class SoapService
 {
@@ -13,6 +14,10 @@ final class SoapService
 
     public function __construct(string $wsdl)
     {
+        if (!class_exists(SoapClient::class)) {
+            throw new RuntimeException('La extensión SOAP de PHP no está habilitada.');
+        }
+
         $this->cliente = new SoapClient($wsdl, [
             'trace' => true,
             'exceptions' => true,
