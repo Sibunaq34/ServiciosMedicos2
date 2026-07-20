@@ -53,7 +53,7 @@
                 <?php foreach ($oferentes as $oferente): ?>
                 <tr>
                     <td>
-                        <a href="<?= e(url('detalle-oferente', ['id' => $oferente['id_oferente']])) ?>">
+                        <a href="<?= e(url('detalle-oferente-core8', ['idOferente' => $oferente['id_oferente']])) ?>">
                             <?= e($oferente['nombre_completo']) ?>
                         </a>
                     </td>
