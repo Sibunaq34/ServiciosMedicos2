@@ -16,15 +16,6 @@ require __DIR__.'/app/bootstrap.php';
 
 Sesion::start();
 
-$controller = new HomeController();
-$detalleOferenteController = new DetalleOferenteController();
-$oferentesController = new OferentesController();
-$contratacionController = new ContratacionController();
-$loginController = new LoginController();
-$puestosController = new PuestosController();
-$expedientesController = new ExpedientesController();
-$usuariosController = new UsuariosController();
-
 $action = filter_input(INPUT_GET, 'action') ?: 'login';
 
 try {
@@ -33,32 +24,28 @@ try {
     }
 
     match ($action) {
-        'index' => $controller->index(),
-        'login' => $loginController->mostrarLogin(),
-        'procesar-login' => $loginController->procesarLogin(),
-        'logout' => $loginController->logout(),
-        'puestos' => $puestosController->index(),
-        'puestos-crear' => $puestosController->crear(),
-        'puestos-consultar' => $puestosController->consultar(),
-        'puestos-editar' => $puestosController->editar(),
-        'puestos-estado' => $puestosController->cambiarEstado(),
-        'expedientes' => $expedientesController->index(),
-        'expediente-crear' => $expedientesController->crear(),
-        'expediente-consultar' => $expedientesController->consultar(),
-        'expediente-editar' => $expedientesController->editar(),
-        'usuarios' => $usuariosController->index(),
-        'usuarios-crear' => $usuariosController->crear(),
-        'usuarios-consultar' => $usuariosController->consultar(),
-        'usuarios-editar' => $usuariosController->editar(),
-        'usuarios-estado' => $usuariosController->cambiarEstado(),
+        'index' => (new HomeController())->index(),
+        'login' => (new LoginController())->mostrarLogin(),
+        'procesar-login' => (new LoginController())->procesarLogin(),
+        'logout' => (new LoginController())->logout(),
+        'puestos' => (new PuestosController())->index(),
+        'expedientes' => (new ExpedientesController())->index(),
+        'expediente-crear' => (new ExpedientesController())->crear(),
+        'expediente-consultar' => (new ExpedientesController())->consultar(),
+        'expediente-editar' => (new ExpedientesController())->editar(),
+        'usuarios' => (new UsuariosController())->index(),
+        'usuarios-crear' => (new UsuariosController())->crear(),
+        'usuarios-consultar' => (new UsuariosController())->consultar(),
+        'usuarios-editar' => (new UsuariosController())->editar(),
+        'usuarios-estado' => (new UsuariosController())->cambiarEstado(),
         // Persona C - Kenneth
         // Ruta para consultar el detalle completo del oferente en CORE8.
-        'detalle-oferente-core8' => $detalleOferenteController->detalle(),
-        'detalle-oferente', 'detalleOferente' => $contratacionController->detalleOferente(),
-        'crear-empleado' => $contratacionController->crearEmpleado(),
-        'oferentes' => $oferentesController->oferentesPorPuesto(),
-        'listado-oferentes' => $oferentesController->listadoOferentes(),
-        default => $controller->notFound(),
+        'detalle-oferente-core8' => (new DetalleOferenteController())->detalle(),
+        'detalle-oferente', 'detalleOferente' => (new ContratacionController())->detalleOferente(),
+        'crear-empleado' => (new ContratacionController())->crearEmpleado(),
+        'oferentes' => (new OferentesController())->oferentesPorPuesto(),
+        'listado-oferentes' => (new OferentesController())->listadoOferentes(),
+        default => (new HomeController())->notFound(),
     };
 
 } catch (Throwable $exception) {

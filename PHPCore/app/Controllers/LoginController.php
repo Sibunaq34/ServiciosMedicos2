@@ -35,7 +35,7 @@ final class LoginController
             render('errors/419', ['title' => 'Solicitud vencida']);
             return;
         }
-        if ($usuario === '' || $password === '') {
+        if ($usuario === '' || mb_strlen($usuario) > 50 || $password === '') {
             $this->rechazar();
         }
 

@@ -18,7 +18,7 @@
     <nav class="navbar navbar-dark app-navbar shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-semibold d-flex align-items-center" href="<?= e(url()) ?>">
-                <i class="bi bi-heart-pulse me-2"></i>
+                <img class="me-2" src="public/assets/img/logo-servicios-medicos.svg" width="36" height="36" alt="">
                 <span>Servicios Médicos</span>
             </a>
 
@@ -26,6 +26,7 @@
             <?php $usuarioSesion = \App\Core\Sesion::usuario(); ?>
             <div class="navbar-nav ms-auto flex-row gap-3 align-items-center flex-wrap">
                 <span class="navbar-text text-white">
+                    <i class="bi bi-person-circle me-1" aria-hidden="true"></i>
                     <?= e($usuarioSesion['nombre_completo'] ?? '') ?>
                     <?php if (($usuarioSesion['nombre_rol'] ?? '') !== ''): ?>
                         · <?= e($usuarioSesion['nombre_rol']) ?>
@@ -33,10 +34,10 @@
                 </span>
                 <a class="nav-link" href="<?= e(url('index')) ?>">Inicio</a>
                 <a class="nav-link" href="<?= e(url('puestos')) ?>">Puestos</a>
+                <?php if (\App\Core\Sesion::esAdministrador()): ?>
                 <a class="nav-link" href="<?= e(url('expedientes')) ?>">Expedientes</a>
                 <a class="nav-link" href="<?= e(url('usuarios')) ?>">Usuarios</a>
-                <a class="nav-link" href="<?= e(url('detalle-oferente', ['id' => 1])) ?>">Detalle de Oferente</a>
-                <a class="nav-link" href="<?= e(url('crear-empleado', ['idOferente' => 1])) ?>">Crear Empleado</a>
+                <?php endif; ?>
                 <a class="nav-link" href="<?= e(url('oferentes')) ?>">Oferentes por Puesto</a>
                 <a class="nav-link" href="<?= e(url('listado-oferentes')) ?>">Listado de Oferentes</a>
                 <a class="nav-link" href="<?= e(url('logout')) ?>">Cerrar sesión</a>

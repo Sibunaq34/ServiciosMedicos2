@@ -14,6 +14,17 @@
                 <?php endforeach; ?>
                 </tbody>
             </table></div>
+            <?php if ($totalPaginas > 1): ?>
+                <nav class="p-3" aria-label="Paginación de puestos">
+                    <ul class="pagination justify-content-center mb-0">
+                        <?php for ($pagina = 1; $pagina <= $totalPaginas; $pagina++): ?>
+                            <li class="page-item <?= $pagina === $paginaActual ? 'active' : '' ?>">
+                                <a class="page-link" href="<?= e(url('puestos', ['pagina' => $pagina])) ?>"><?= $pagina ?></a>
+                            </li>
+                        <?php endfor; ?>
+                    </ul>
+                </nav>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 </div>

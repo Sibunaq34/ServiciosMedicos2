@@ -11,15 +11,6 @@ use Throwable;
 
 final class PuestoRepository
 {
-    public function listar(): array
-    {
-        try {
-            return $this->normalizarLista($this->servicio()->call('ListarPuestos'));
-        } catch (Throwable $exception) {
-            throw new RuntimeException('No fue posible consultar los puestos.', 0, $exception);
-        }
-    }
-
     public function listarActivos(): array
     {
         try {
@@ -29,69 +20,9 @@ final class PuestoRepository
         }
     }
 
-    public function crear(array $datos): array
-    {
-        return $this->ejecutar('CrearPuesto', [
-            'codigoPuesto' => (string) ($datos['codigoPuesto'] ?? ''),
-            'nombrePuesto' => (string) ($datos['nombrePuesto'] ?? ''),
-            'descripcion' => (string) ($datos['descripcion'] ?? ''),
-            'estado' => (string) ($datos['estado'] ?? 'activo'),
-        ], 'Puesto creado correctamente.');
-    }
-
-    public function consultar(int $id): array
-    {
-        return $this->ejecutar('ConsultarPuesto', ['id' => $id], 'Puesto encontrado.', true);
-    }
-
-    public function editar(array $datos): array
-    {
-        return $this->ejecutar('EditarPuesto', [
-            'id' => (int) ($datos['id'] ?? 0),
-            'codigoPuesto' => (string) ($datos['codigoPuesto'] ?? ''),
-            'nombrePuesto' => (string) ($datos['nombrePuesto'] ?? ''),
-            'descripcion' => (string) ($datos['descripcion'] ?? ''),
-            'estado' => (string) ($datos['estado'] ?? ''),
-        ], 'Puesto actualizado correctamente.');
-    }
-
-    public function cambiarEstado(int $id, string $estado): array
-    {
-        return $this->ejecutar(
-            'CambiarEstadoPuesto',
-            ['id' => $id, 'estado' => $estado],
-            'Estado del puesto actualizado correctamente.'
-        );
-    }
-
     private function servicio(): SoapService
     {
         return new SoapService(WebService::PUESTOS_WSDL);
-    }
-
-    private function ejecutar(
-        string $operacion,
-        array $parametros,
-        string $mensajePredeterminado,
-        bool $conDatos = false
-    ): array {
-        try {
-            $respuesta = $this->desenvolver($this->servicio()->call($operacion, $parametros));
-            $exito = filter_var($this->valor($respuesta, ['Exito', 'exito'], false), FILTER_VALIDATE_BOOL);
-            $mensaje = (string) $this->valor(
-                $respuesta,
-                ['Mensaje', 'mensaje'],
-                $exito ? $mensajePredeterminado : 'El servicio rechazó la operación.'
-            );
-
-            return [
-                'exito' => $exito,
-                'mensaje' => $mensaje,
-                'datos' => $conDatos ? $this->normalizarRegistro($respuesta) : [],
-            ];
-        } catch (Throwable) {
-            return ['exito' => false, 'mensaje' => 'No fue posible completar la operación con el servicio de puestos.'];
-        }
     }
 
     private function normalizarLista(mixed $respuesta): array
