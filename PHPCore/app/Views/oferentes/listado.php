@@ -9,15 +9,28 @@
  *   int         $paginaActual
  *   int         $totalPaginas
  *
- * Enlaces pendientes de HU no implementadas todavía:
- *   - 'detalleOferente' -> HU CORE9 (detalle de oferente)
- *   - 'listadoPuestos'  -> HU CORE6 (listado de puestos)
- * Se usan aquí como placeholders con el mismo helper url() del proyecto;
- * cuando esas HU existan, solo hace falta que el 'action' coincida.
+ * El nombre enlaza a 'detalle-oferente' (HU CORE9, ya implementada).
+ *
+ * Enlace pendiente de HU no implementada todavía:
+ *   - 'listadoPuestos' -> HU CORE6 (listado de puestos)
+ * Se usa aquí como placeholder con el mismo helper url() del proyecto;
+ * cuando esa HU exista, solo hace falta que el 'action' coincida.
  */
 ?>
 
 <h1>Listado de Oferentes</h1>
+
+<form method="get" action="<?= e(url('listado-oferentes')) ?>" class="row g-2 mb-3">
+    <input type="hidden" name="action" value="listado-oferentes">
+    <div class="col-auto">
+        <label for="codigoPuestoInput" class="visually-hidden">Código del puesto</label>
+        <input type="text" class="form-control" id="codigoPuestoInput" name="codigo_puesto"
+               placeholder="Código del puesto (ej. GER001)" value="<?= e($codigoPuesto) ?>">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+</form>
 
 <?php if ($error !== null): ?>
     <div class="alert alert-warning"><?= e($error) ?></div>
@@ -40,7 +53,7 @@
                 <?php foreach ($oferentes as $oferente): ?>
                 <tr>
                     <td>
-                        <a href="<?= e(url('detalleOferente', ['id' => $oferente['id_oferente']])) ?>">
+                        <a href="<?= e(url('detalle-oferente', ['id' => $oferente['id_oferente']])) ?>">
                             <?= e($oferente['nombre_completo']) ?>
                         </a>
                     </td>
@@ -56,7 +69,7 @@
                 <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
                 <li class="page-item<?= $i === $paginaActual ? ' active' : '' ?>">
                     <a class="page-link"
-                       href="<?= e(url('listadoOferentes', ['codigo_puesto' => $codigoPuesto, 'pagina' => $i])) ?>">
+                       href="<?= e(url('listado-oferentes', ['codigo_puesto' => $codigoPuesto, 'pagina' => $i])) ?>">
                         <?= $i ?>
                     </a>
                 </li>

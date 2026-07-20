@@ -17,6 +17,18 @@
 
 <h1>Oferentes por Puesto</h1>
 
+<form method="get" action="<?= e(url('oferentes')) ?>" class="row g-2 mb-3">
+    <input type="hidden" name="action" value="oferentes">
+    <div class="col-auto">
+        <label for="codigoPuestoInput" class="visually-hidden">Código del puesto</label>
+        <input type="text" class="form-control" id="codigoPuestoInput" name="codigo_puesto"
+               placeholder="Código del puesto (ej. GER001)" value="<?= e($codigoPuesto) ?>">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+</form>
+
 <?php if ($error !== null): ?>
     <div class="alert alert-warning"><?= e($error) ?></div>
 

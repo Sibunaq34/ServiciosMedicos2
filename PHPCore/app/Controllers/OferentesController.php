@@ -42,7 +42,7 @@ final class OferentesController
             return;
         }
 
-        $oferentes = $this->repositorio->obtenerPorPuesto($codigoPuesto);
+        $oferentes = $this->repositorio->listarPorPuesto($codigoPuesto);
 
         if ($aceptaHtml) {
             render('oferentes/servicio', [
@@ -64,8 +64,6 @@ final class OferentesController
 
     public function listadoOferentes(): void
     {
-
-
         $codigoPuesto = Validador::codigoPuesto(filter_input(INPUT_GET, 'codigo_puesto'));
         $pagina = Validador::pagina(filter_input(INPUT_GET, 'pagina'));
 
@@ -81,13 +79,13 @@ final class OferentesController
             return;
         }
 
-        $todos = $this->repositorio->obtenerPorPuesto($codigoPuesto);
+        $todos = $this->repositorio->listarPorPuesto($codigoPuesto);
 
         $totalRegistros = count($todos);
         $totalPaginas = max(1, (int) ceil($totalRegistros / self::TAMANO_PAGINA));
         $pagina = min($pagina, $totalPaginas);
-        $offset = ($pagina - 1) * self::TAMANO_PAGINA;
-        $oferentesPagina = array_slice($todos, $offset, self::TAMANO_PAGINA);
+
+        $oferentesPagina = array_slice($todos, ($pagina - 1) * self::TAMANO_PAGINA, self::TAMANO_PAGINA);
 
         render('oferentes/listado', [
             'title'        => 'Listado de Oferentes',
