@@ -69,7 +69,10 @@ final class ContratacionController
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
             http_response_code(405);
             Sesion::flash('contratacion_error', 'La creación debe enviarse mediante POST.');
-            redirect(url('detalle-oferente', ['id' => filter_input(INPUT_GET, 'id')]));
+            redirect(url('detalle-oferente', array_filter([
+                'id' => filter_input(INPUT_GET, 'id'),
+                'codigo_puesto' => Validador::codigoPuesto(filter_input(INPUT_GET, 'codigo_puesto')),
+            ])));
         }
 
         $idOferente = Validador::idPositivo($_POST['id_oferente'] ?? null);
@@ -118,7 +121,7 @@ final class ContratacionController
 
     private function autorizar(): bool
     {
-        if (Sesion::authenticated()) {
+        if (Sesion::estaAutenticado()) {
             return true;
         }
 

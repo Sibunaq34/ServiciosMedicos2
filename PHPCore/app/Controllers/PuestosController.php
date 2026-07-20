@@ -7,6 +7,8 @@ namespace App\Controllers;
 use App\Core\Sesion;
 use App\Core\Validador;
 use App\Repositories\PuestoRepository;
+use RuntimeException;
+use SoapFault;
 use Throwable;
 
 final class PuestosController
@@ -38,7 +40,14 @@ final class PuestosController
                 self::TAMANO_PAGINA
             );
             $error = null;
-        } catch (Throwable) {
+        } catch (SoapFault | RuntimeException $exception) {
+            error_log($exception->__toString());
+            $puestos = [];
+            $totalPaginas = 1;
+            $pagina = 1;
+            $error = 'No fue posible consultar los puestos activos.';
+        } catch (Throwable $exception) {
+            error_log($exception->__toString());
             $puestos = [];
             $totalPaginas = 1;
             $pagina = 1;

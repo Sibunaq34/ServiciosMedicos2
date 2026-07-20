@@ -65,7 +65,8 @@ final class PuestoRepository
     private function desenvolver(mixed $respuesta): mixed
     {
         while (is_object($respuesta) && count(get_object_vars($respuesta)) === 1) {
-            $respuesta = reset($respuesta);
+            $propiedades = get_object_vars($respuesta);
+            $respuesta = reset($propiedades);
         }
         while (is_array($respuesta) && count($respuesta) === 1 && !array_is_list($respuesta)) {
             $respuesta = reset($respuesta);
