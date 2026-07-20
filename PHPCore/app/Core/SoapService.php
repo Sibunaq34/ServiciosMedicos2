@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-use App\Config\WebService;
 use SoapClient;
 use SoapFault;
 
@@ -15,11 +14,16 @@ final class ServicioSoap
     public function __construct(string $wsdl)
     {
         $this->cliente = new SoapClient($wsdl, [
-            'trace' => true,
+            'trace' => false,
             'exceptions' => true,
+            'cache_wsdl' => WSDL_CACHE_NONE,
+            'connection_timeout' => 10,
         ]);
     }
 
+    /**
+     * @throws SoapFault
+     */
     public function call(string $metodo, array $parametros = []): mixed
     {
         return $this->cliente->__soapCall($metodo, [$parametros]);
