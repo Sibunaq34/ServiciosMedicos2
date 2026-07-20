@@ -10,8 +10,6 @@ final class WebService
     public const USUARIO = 'http://localhost:8080/ServicioUsuario.svc?wsdl';
     public const PACIENTE = 'http://localhost:8080/ServicioPaciente.svc?wsdl';
     public const EMPLEADOS = 'http://localhost:54784/ServicioEmpleados.svc?wsdl';
-    public const DETALLE_OFERENTE = 'http://localhost:54784/ServicioDetalleOferente.svc?wsdl';
-
     // Persona C - Kenneth
     // Centraliza el WSDL utilizado por CORE8.
     public const DETALLE_OFERENTE = 'http://localhost:54784/ServicioDetalleOferente.svc?wsdl';

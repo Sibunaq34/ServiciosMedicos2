@@ -47,6 +47,8 @@ final class EmpleadoRepository
             'exito' => (bool) ($resultado->Exito ?? false),
             'codigo' => (string) ($resultado->Codigo ?? 'INTERNAL_ERROR'),
             'mensaje' => (string) ($resultado->Mensaje ?? 'No fue posible crear el empleado.'),
+            'idEmpleado' => isset($resultado->IdEmpleado) ? (int) $resultado->IdEmpleado : null,
+            'numeroEmpleado' => (string) ($resultado->NumeroEmpleado ?? ''),
         ];
     }
 }

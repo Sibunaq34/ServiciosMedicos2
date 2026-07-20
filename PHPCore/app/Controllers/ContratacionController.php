@@ -27,7 +27,7 @@ final class ContratacionController
         }
 
         $id = Validador::idPositivo(filter_input(INPUT_GET, 'id'));
-        $codigoPuesto = filter_input(INPUT_GET, 'codigo_puesto') ?: '';
+        $codigoPuesto = Validador::codigoPuesto(filter_input(INPUT_GET, 'codigo_puesto')) ?? '';
         $error = null;
         $oferente = null;
         $yaEsEmpleado = false;
@@ -92,6 +92,11 @@ final class ContratacionController
         }
 
         try {
+            if ($this->empleados->oferenteEsEmpleado($idOferente)) {
+                Sesion::flash('contratacion_error', 'El oferente ya fue registrado como empleado.');
+                redirect($regreso);
+            }
+
             $resultado = $this->empleados->registrar([
                 'IdOferente' => $idOferente,
                 'CodigoPuesto' => $codigoPuesto,

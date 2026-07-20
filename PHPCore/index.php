@@ -22,10 +22,8 @@ $action = filter_input(INPUT_GET, 'action') ?: 'index';
 try {
     match ($action) {
         'index' => $controller->index(),
-        'core9' => $controller->detalleOferente(),
-        'detalle-oferente' => $controller->detalleOferente(),
-        'core3' => $controller->crearEmpleado(),
-        'crear-empleado' => $controller->crearEmpleado(),
+        'core9' => $contratacionController->detalleOferente(),
+        'core3' => $contratacionController->crearEmpleado(),
         // Persona C - Kenneth
         // Ruta para consultar el detalle completo del oferente en CORE8.
         'detalle-oferente-core8' => $detalleOferenteController->detalle(),
