@@ -22,15 +22,13 @@ final class DetalleOferenteController
         $idOferente = $this->obtenerIdOferente();
         $detalle = null;
         $error = null;
-        $integracionPendiente = false;
 
         if ($idOferente === null) {
-            $error = 'El parámetro idOferente es requerido y debe ser un entero positivo.';
+            $error = 'El parametro idOferente es requerido y debe ser un entero positivo.';
         } else {
             $resultado = $this->repositorio->obtenerDetalle($idOferente);
             $detalle = is_array($resultado['datos'] ?? null) ? $resultado['datos'] : null;
             $error = is_string($resultado['mensaje'] ?? null) ? $resultado['mensaje'] : null;
-            $integracionPendiente = ($resultado['exito'] ?? false) === false && $detalle === null;
         }
 
         render('oferentes/detalle-core8', [
@@ -38,7 +36,6 @@ final class DetalleOferenteController
             'idOferente' => $idOferente,
             'detalle' => $detalle,
             'error' => $error,
-            'integracionPendiente' => $integracionPendiente,
         ]);
     }
 
