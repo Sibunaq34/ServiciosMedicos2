@@ -8,14 +8,18 @@
             integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
             crossorigin="anonymous">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+        <link rel="icon" type="image/svg+xml" href="public/assets/images/favicon.svg">
+        <link rel="icon" type="image/x-icon" href="public/assets/images/favicon.ico">
+        <link rel="shortcut icon" href="public/assets/images/favicon.ico">
+        <link rel="apple-touch-icon" href="public/assets/images/favicon.svg">
         <link href="public/assets/css/app.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-dark app-navbar shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-semibold" href="<?= e(url()) ?>">
-                <i class="bi bi-people-fill me-2"></i>
-                Servicios Médicos
+            <a class="navbar-brand fw-semibold d-flex align-items-center" href="<?= e(url()) ?>">
+                <i class="bi bi-heart-pulse me-2"></i>
+                <span>Servicios Médicos</span>
             </a>
 
             <?php if (\App\Core\Sesion::estaAutenticado()): ?>
