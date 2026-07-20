@@ -7,7 +7,7 @@ namespace App\Config;
 final class WebService
 {
     public const LOGIN = 'http://localhost:54784/ServicioLogIn.svc?wsdl';
-    public const USUARIO = 'http://localhost:8080/ServicioUsuario.svc?wsdl';
+    public const USUARIOS = 'http://localhost:54784/ServicioUsuarios.svc?wsdl';
     public const PACIENTE = 'http://localhost:8080/ServicioPaciente.svc?wsdl';
 
     // Persona C - Kenneth
