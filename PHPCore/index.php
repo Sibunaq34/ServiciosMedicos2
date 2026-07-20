@@ -25,7 +25,7 @@ $puestosController = new PuestosController();
 $expedientesController = new ExpedientesController();
 $usuariosController = new UsuariosController();
 
-$action = filter_input(INPUT_GET, 'action') ?: 'index';
+$action = filter_input(INPUT_GET, 'action') ?: 'login';
 
 try {
     if (!in_array($action, ['login', 'procesar-login'], true)) {
@@ -34,8 +34,6 @@ try {
 
     match ($action) {
         'index' => $controller->index(),
-        'core9' => $contratacionController->detalleOferente(),
-        'core3' => $contratacionController->crearEmpleado(),
         'login' => $loginController->mostrarLogin(),
         'procesar-login' => $loginController->procesarLogin(),
         'logout' => $loginController->logout(),
@@ -53,17 +51,11 @@ try {
         'usuarios-consultar' => $usuariosController->consultar(),
         'usuarios-editar' => $usuariosController->editar(),
         'usuarios-estado' => $usuariosController->cambiarEstado(),
-        'core9' => $controller->detalleOferente(),
-        'detalle-oferente' => $controller->detalleOferente(),
-        'core3' => $controller->crearEmpleado(),
-        'crear-empleado' => $controller->crearEmpleado(),
         // Persona C - Kenneth
         // Ruta para consultar el detalle completo del oferente en CORE8.
         'detalle-oferente-core8' => $detalleOferenteController->detalle(),
-        'detalle-oferente', 'detalleOferente' =>
-            $contratacionController->detalleOferente(),
-        'crear-empleado' =>
-            $contratacionController->crearEmpleado(),
+        'detalle-oferente', 'detalleOferente' => $contratacionController->detalleOferente(),
+        'crear-empleado' => $contratacionController->crearEmpleado(),
         'oferentes' => $oferentesController->oferentesPorPuesto(),
         'listado-oferentes' => $oferentesController->listadoOferentes(),
         default => $controller->notFound(),
