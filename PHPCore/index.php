@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Controllers\HomeController;
 use App\Controllers\DetalleOferenteController;
 use App\Controllers\OferentesController;
+use App\Controllers\LoginController;
+use App\Controllers\PuestosController;
 use App\Core\Sesion;
 
 require __DIR__.'/app/bootstrap.php';
@@ -14,12 +16,18 @@ Sesion::start();
 $controller = new HomeController();
 $detalleOferenteController = new DetalleOferenteController();
 $oferentesController = new OferentesController();
+$loginController = new LoginController();
+$puestosController = new PuestosController();
 
 $action = filter_input(INPUT_GET, 'action') ?: 'index';
 
 try {
     match ($action) {
         'index' => $controller->index(),
+        'login' => $loginController->mostrarLogin(),
+        'procesar-login' => $loginController->procesarLogin(),
+        'logout' => $loginController->logout(),
+        'puestos' => $puestosController->index(),
         'core9' => $controller->detalleOferente(),
         'detalle-oferente' => $controller->detalleOferente(),
         'core3' => $controller->crearEmpleado(),

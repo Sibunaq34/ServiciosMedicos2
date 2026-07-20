@@ -18,13 +18,24 @@
                 Servicios Médicos
             </a>
 
-            <div class="navbar-nav ms-auto flex-row gap-3">
+            <?php if (\App\Core\Sesion::estaAutenticado()): ?>
+            <?php $usuarioSesion = \App\Core\Sesion::usuario(); ?>
+            <div class="navbar-nav ms-auto flex-row gap-3 align-items-center flex-wrap">
+                <span class="navbar-text text-white">
+                    <?= e($usuarioSesion['nombre_completo'] ?? '') ?>
+                    <?php if (($usuarioSesion['nombre_rol'] ?? '') !== ''): ?>
+                        · <?= e($usuarioSesion['nombre_rol']) ?>
+                    <?php endif; ?>
+                </span>
                 <a class="nav-link" href="<?= e(url('index')) ?>">Inicio</a>
+                <a class="nav-link" href="<?= e(url('puestos')) ?>">Puestos</a>
                 <a class="nav-link" href="<?= e(url('detalle-oferente', ['id' => 1])) ?>">Detalle de Oferente</a>
                 <a class="nav-link" href="<?= e(url('crear-empleado', ['idOferente' => 1])) ?>">Crear Empleado</a>
                 <a class="nav-link" href="<?= e(url('oferentes')) ?>">Oferentes por Puesto</a>
                 <a class="nav-link" href="<?= e(url('listado-oferentes')) ?>">Listado de Oferentes</a>
+                <a class="nav-link" href="<?= e(url('logout')) ?>">Cerrar sesión</a>
             </div>
+            <?php endif; ?>
         </div>
     </nav>
     

@@ -10,7 +10,11 @@ final class HomeController
 {
     public function index(): void
     {
+        Sesion::requerirAutenticacion();
+        $usuario = Sesion::usuario();
+
         render('index', [
+            'nombreCompleto' => $usuario['nombre_completo'] ?? '',
             'title' => 'Bienvenido a Servicios Médicos',
         ]);
     }

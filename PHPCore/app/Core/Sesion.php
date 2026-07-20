@@ -48,5 +48,47 @@ final class Sesion
         return is_string($token)
             && hash_equals(self::csrfToken(), $token);
     }
+
+    public static function iniciarAutenticacion(array $usuario): void
+    {
+        session_regenerate_id(true);
+        $_SESSION['autenticacion'] = [
+            'autenticado' => true,
+            'id_usuario' => (int) ($usuario['idUsuario'] ?? 0),
+            'usuario' => (string) ($usuario['usuario'] ?? ''),
+            'nombre_completo' => (string) ($usuario['nombreCompleto'] ?? ''),
+            'id_rol' => (int) ($usuario['idRol'] ?? 0),
+            'nombre_rol' => (string) ($usuario['nombreRol'] ?? ''),
+            'estado' => (string) ($usuario['estado'] ?? ''),
+        ];
+    }
+
+    public static function estaAutenticado(): bool
+    {
+        return ($_SESSION['autenticacion']['autenticado'] ?? false) === true;
+    }
+
+    public static function usuario(): array
+    {
+        return is_array($_SESSION['autenticacion'] ?? null) ? $_SESSION['autenticacion'] : [];
+    }
+
+    public static function requerirAutenticacion(): void
+    {
+        if (!self::estaAutenticado()) {
+            self::flash('error', 'Por favor inicie sesión para utilizar el sistema');
+            redirect(url('login'));
+        }
+    }
+
+    public static function cerrar(): void
+    {
+        $_SESSION = [];
+        if (ini_get('session.use_cookies')) {
+            $parametros = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000, $parametros['path'], $parametros['domain'], $parametros['secure'], $parametros['httponly']);
+        }
+        session_destroy();
+    }
 }
 
