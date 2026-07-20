@@ -48,5 +48,17 @@ final class Sesion
         return is_string($token)
             && hash_equals(self::csrfToken(), $token);
     }
+
+    public static function usuarioId(): ?int
+    {
+        $id = filter_var($_SESSION['id_usuario'] ?? null, FILTER_VALIDATE_INT);
+
+        return $id !== false && $id > 0 ? $id : null;
+    }
+
+    public static function authenticated(): bool
+    {
+        return self::usuarioId() !== null;
+    }
 }
 
