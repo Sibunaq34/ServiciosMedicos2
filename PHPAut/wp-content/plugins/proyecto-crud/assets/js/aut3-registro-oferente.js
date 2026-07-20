@@ -6,6 +6,10 @@
         const modal = root.querySelector('[data-aut3-modal]');
         const cancelar = root.querySelector('[data-aut3-cancelar]');
         const modalAceptar = root.querySelector('[data-aut3-modal-aceptar]');
+        const modalMensaje = root.querySelector('[data-aut3-modal-mensaje]');
+        const serverMessage = root.querySelector('[data-aut3-server-message]');
+        const submitButton = form ? form.querySelector('[type="submit"]') : null;
+        let enviando = false;
 
         if (!form || !modal || !cancelar || !modalAceptar) {
             return;
@@ -56,8 +60,24 @@
             }
         }
 
+        function setMensajeServidor(mensaje, exito) {
+            if (!serverMessage) {
+                return;
+            }
+
+            serverMessage.textContent = mensaje || '';
+            serverMessage.style.color = exito ? 'CanvasText' : '#b42318';
+        }
+
+        function limpiarErroresServidor() {
+            ['codigo_puesto', 'tipo_identificacion', 'identificacion', 'nombre_completo', 'fecha_nacimiento', 'correos', 'telefonos', 'curriculum'].forEach((nombre) => {
+                setError(nombre, '');
+            });
+            setMensajeServidor('', false);
+        }
+
         // Persona C - Kenneth
-        // Validaciones visuales temporales.
+        // Validaciones visuales del formulario.
         function validarTipoIdentificacion() {
             const tipo = form.elements.tipo_identificacion.value;
             const valido = ['CedulaIdentidad', 'DIMEX', 'Pasaporte'].includes(tipo);
@@ -214,21 +234,84 @@
         }
 
         // Persona C - Kenneth
-        // Modal temporal sin persistencia real.
-        function mostrarModal() {
+        // Modal de confirmacion tras persistencia real.
+        function mostrarModal(mensaje) {
+            if (modalMensaje && mensaje) {
+                modalMensaje.textContent = mensaje;
+            }
+
             modal.hidden = false;
             modalAceptar.focus();
+        }
+
+        function aplicarErroresServidor(errores) {
+            Object.entries(errores || {}).forEach(([nombre, mensaje]) => {
+                setError(nombre, mensaje);
+            });
+        }
+
+        function cambiarEstadoEnvio(activo) {
+            enviando = activo;
+
+            if (submitButton) {
+                submitButton.disabled = activo;
+                submitButton.textContent = activo ? 'Guardando...' : 'Aceptar';
+            }
+        }
+
+        async function enviarFormulario() {
+            const config = window.AUT3RegistroOferente || {};
+            const formData = new FormData(form);
+
+            if (!formData.get('nonce') && config.nonce) {
+                formData.append('nonce', config.nonce);
+            }
+
+            const response = await fetch(config.ajaxUrl || form.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+            });
+
+            const payload = await response.json();
+
+            if (!response.ok || !payload.success) {
+                const data = payload.data || {};
+                aplicarErroresServidor(data.errores || {});
+                throw new Error(data.mensaje || 'No fue posible completar el registro.');
+            }
+
+            return payload.data || {};
         }
 
         form.addEventListener('submit', (event) => {
             event.preventDefault();
 
             // Persona C - Kenneth
-            // Persistencia temporalmente pendiente.
-            // Sustituir por el repository y las tablas principales cuando sean confirmados.
-            if (validarFormulario()) {
-                mostrarModal();
+            // Envia el formulario solo despues de validar en cliente.
+            if (enviando) {
+                return;
             }
+
+            limpiarErroresServidor();
+
+            if (!validarFormulario()) {
+                return;
+            }
+
+            cambiarEstadoEnvio(true);
+
+            enviarFormulario()
+                .then((data) => {
+                    setMensajeServidor('', true);
+                    mostrarModal(data.mensaje || 'Datos guardados de manera satisfactoria');
+                })
+                .catch((error) => {
+                    setMensajeServidor(error.message, false);
+                })
+                .finally(() => {
+                    cambiarEstadoEnvio(false);
+                });
         });
 
         cancelar.addEventListener('click', volver);

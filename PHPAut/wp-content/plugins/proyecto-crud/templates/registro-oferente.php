@@ -20,9 +20,10 @@ $aut3_id_formulario = 'aut3-' . wp_unique_id();
         <form class="aut3-form" novalidate enctype="multipart/form-data" data-aut3-form>
             <?php
             // Persona C - Kenneth
-            // Persistencia temporalmente pendiente.
+            // Envia el registro al endpoint publico de AUT3.
             ?>
-            <?php // Sustituir por el repository y las tablas principales cuando sean confirmados. ?>
+            <input type="hidden" name="action" value="aut3_registrar_oferente">
+            <input type="hidden" name="nonce" value="<?php echo esc_attr(wp_create_nonce('aut3_registro_oferente')); ?>">
 
             <div class="aut3-field aut3-field-full">
                 <label for="<?php echo esc_attr($aut3_id_formulario); ?>-puesto">Puesto seleccionado</label>
@@ -34,6 +35,7 @@ $aut3_id_formulario = 'aut3-' . wp_unique_id();
                     aria-readonly="true"
                 >
                 <input type="hidden" name="codigo_puesto" value="<?php echo esc_attr($aut3_datos_puesto['codigo']); ?>">
+                <p class="aut3-error" data-error-for="codigo_puesto" aria-live="polite"></p>
             </div>
 
             <div class="aut3-field">
@@ -87,6 +89,7 @@ $aut3_id_formulario = 'aut3-' . wp_unique_id();
             </div>
 
             <div class="aut3-actions">
+                <p class="aut3-server-message" data-aut3-server-message aria-live="polite"></p>
                 <button type="submit" class="aut3-button aut3-button-primary">Aceptar</button>
                 <button type="button" class="aut3-button aut3-button-secondary" data-aut3-cancelar>Cancelar</button>
             </div>
@@ -95,12 +98,12 @@ $aut3_id_formulario = 'aut3-' . wp_unique_id();
 
     <?php
     // Persona C - Kenneth
-    // Modal temporal para confirmar el flujo visual.
+    // Modal de confirmacion tras persistencia exitosa.
     ?>
     <div class="aut3-modal" data-aut3-modal hidden>
         <div class="aut3-modal-backdrop"></div>
         <div class="aut3-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="<?php echo esc_attr($aut3_id_formulario); ?>-modal-title">
-            <p id="<?php echo esc_attr($aut3_id_formulario); ?>-modal-title">Datos guardados de manera satisfactoria</p>
+            <p id="<?php echo esc_attr($aut3_id_formulario); ?>-modal-title" data-aut3-modal-mensaje>Datos guardados de manera satisfactoria</p>
             <button type="button" class="aut3-button aut3-button-primary" data-aut3-modal-aceptar>Aceptar</button>
         </div>
     </div>
