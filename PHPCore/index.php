@@ -46,8 +46,6 @@ try {
         'expediente-crear' => $expedientesController->crear(),
         'expediente-consultar' => $expedientesController->consultar(),
         'expediente-editar' => $expedientesController->editar(),
-        // Persona C - Kenneth
-        // Ruta para consultar el detalle completo del oferente en CORE8.
         'detalle-oferente-core8' => $detalleOferenteController->detalle(),
         'detalle-oferente', 'detalleOferente' =>
             $contratacionController->detalleOferente(),

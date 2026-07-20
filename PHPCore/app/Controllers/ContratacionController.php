@@ -111,9 +111,15 @@ final class ContratacionController
                 $resultado['exito'] ? 'contratacion_exito' : 'contratacion_error',
                 $resultado['mensaje']
             );
+        } catch (\RuntimeException $exception) {
+            error_log($exception->__toString());
+            Sesion::flash('contratacion_error', $exception->getMessage());
+        } catch (\SoapFault $exception) {
+            error_log($exception->__toString());
+            Sesion::flash('contratacion_error', 'No fue posible conectar con el servicio de empleados.');
         } catch (Throwable $exception) {
             error_log($exception->__toString());
-            Sesion::flash('contratacion_error', 'El servicio de empleados no está disponible.');
+            Sesion::flash('contratacion_error', 'No fue posible procesar la respuesta del servicio de empleados.');
         }
 
         redirect($regreso);

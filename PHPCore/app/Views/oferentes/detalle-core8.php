@@ -25,7 +25,6 @@ $texto = static function (array $fila, string $clave): string {
 
 <section class="d-flex flex-column gap-4">
     <div>
-        <p class="section-kicker mb-2">CORE8</p>
         <h1 class="h3 mb-1">Detalle completo de oferente</h1>
         <p class="text-secondary mb-0">Consulta de la información registrada para un oferente.</p>
     </div>

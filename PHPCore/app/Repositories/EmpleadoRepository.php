@@ -37,7 +37,15 @@ final class EmpleadoRepository
         $respuesta = (new ServicioSoap(WebService::EMPLEADOS))
             ->call('RegistrarEmpleado', ['entrada' => $solicitud]);
 
-        $resultado = $respuesta->RegistrarEmpleadoResult ?? null;
+        $resultado = $this->extraer($respuesta, 'RegistrarEmpleadoResult');
+
+        if ($resultado === null) {
+            throw new RuntimeException('El servicio de empleados devolvió una respuesta inválida.');
+        }
+
+        if (is_array($resultado)) {
+            $resultado = (object) $resultado;
+        }
 
         if (!is_object($resultado)) {
             throw new RuntimeException('El servicio de empleados devolvió una respuesta inválida.');
@@ -50,5 +58,26 @@ final class EmpleadoRepository
             'idEmpleado' => isset($resultado->IdEmpleado) ? (int) $resultado->IdEmpleado : null,
             'numeroEmpleado' => (string) ($resultado->NumeroEmpleado ?? ''),
         ];
+    }
+
+    /**
+     * @param mixed $respuesta
+     */
+    private function extraer(mixed $respuesta, string $propiedad): mixed
+    {
+        if (is_object($respuesta) && property_exists($respuesta, $propiedad)) {
+            return $respuesta->{$propiedad};
+        }
+
+        if (is_array($respuesta) && array_key_exists($propiedad, $respuesta)) {
+            return $respuesta[$propiedad];
+        }
+
+        if (is_object($respuesta) && count(get_object_vars($respuesta)) === 1) {
+            $propiedades = get_object_vars($respuesta);
+            return reset($propiedades);
+        }
+
+        return $respuesta;
     }
 }
