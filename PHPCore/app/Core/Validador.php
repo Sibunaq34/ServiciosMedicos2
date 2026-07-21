@@ -4,22 +4,11 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Validador de parámetros de entrada.
- *
- * No existía código previo de este tipo en el proyecto (confirmado en el
- * análisis de arquitectura: app/Core/ solo tenía Sesion.php y BaseDatos.php
- * vacío). Esta clase se crea desde cero, minimalista, siguiendo el mismo
- * estilo de funciones puras/estáticas que ya usa bootstrap.php (e(), url()).
- */
+
 final class Validador
 {
     /**
-     * Valida y sanitiza un código de puesto recibido por GET.
-     *
-     * Reglas: no vacío, máximo 20 caracteres (igual que la columna
-     * `codigo_puesto` en la BD), solo alfanumérico y guiones.
-     *
+     
      * @return string|null El valor limpio, o null si no es válido.
      */
     public static function codigoPuesto(?string $valor): ?string
