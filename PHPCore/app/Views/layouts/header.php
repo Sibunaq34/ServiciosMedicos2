@@ -30,9 +30,6 @@
             <nav class="sidebar-nav nav nav-pills flex-column px-3 py-3">
                 <a class="sidebar-link nav-link <?= $currentAction === 'index' ? 'active' : '' ?>" href="<?= e(url('index')) ?>"><i class="bi bi-house-door-fill me-2"></i>Inicio</a>
                 <a class="sidebar-link nav-link <?= $currentAction === 'puestos' ? 'active' : '' ?>" href="<?= e(url('puestos')) ?>"><i class="bi bi-clipboard-data me-2"></i>Puestos</a>
-                <?php if (\App\Core\Sesion::esAdministrador()): ?>
-                <a class="sidebar-link nav-link <?= $currentAction === 'expedientes' ? 'active' : '' ?>" href="<?= e(url('expedientes')) ?>"><i class="bi bi-file-earmark-text me-2"></i>Expedientes</a>
-                <?php endif; ?>
                 <a class="sidebar-link nav-link <?= $currentAction === 'oferentes' ? 'active' : '' ?>" href="<?= e(url('oferentes')) ?>"><i class="bi bi-people me-2"></i>Oferentes por Puesto</a>
                 <a class="sidebar-link nav-link <?= $currentAction === 'listado-oferentes' ? 'active' : '' ?>" href="<?= e(url('listado-oferentes')) ?>"><i class="bi bi-card-list me-2"></i>Listado de Oferentes</a>
             </nav>
@@ -47,9 +44,6 @@
                 <nav class="sidebar-nav nav nav-pills flex-column px-3 py-3">
                     <a class="sidebar-link nav-link <?= $currentAction === 'index' ? 'active' : '' ?>" href="<?= e(url('index')) ?>"><i class="bi bi-house-door-fill me-2"></i>Inicio</a>
                     <a class="sidebar-link nav-link <?= $currentAction === 'puestos' ? 'active' : '' ?>" href="<?= e(url('puestos')) ?>"><i class="bi bi-clipboard-data me-2"></i>Puestos</a>
-                    <?php if (\App\Core\Sesion::esAdministrador()): ?>
-                    <a class="sidebar-link nav-link <?= $currentAction === 'expedientes' ? 'active' : '' ?>" href="<?= e(url('expedientes')) ?>"><i class="bi bi-file-earmark-text me-2"></i>Expedientes</a>
-                    <?php endif; ?>
                     <a class="sidebar-link nav-link <?= $currentAction === 'oferentes' ? 'active' : '' ?>" href="<?= e(url('oferentes')) ?>"><i class="bi bi-people me-2"></i>Oferentes por Puesto</a>
                     <a class="sidebar-link nav-link <?= $currentAction === 'listado-oferentes' ? 'active' : '' ?>" href="<?= e(url('listado-oferentes')) ?>"><i class="bi bi-card-list me-2"></i>Listado de Oferentes</a>
                 </nav>

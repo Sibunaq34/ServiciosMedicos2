@@ -8,7 +8,6 @@ use App\Controllers\OferentesController;
 use App\Controllers\ContratacionController;
 use App\Controllers\LoginController;
 use App\Controllers\PuestosController;
-use App\Controllers\ExpedientesController;
 use App\Controllers\UsuariosController;
 use App\Core\Sesion;
 
@@ -22,9 +21,6 @@ $oferentesController = new OferentesController();
 $contratacionController = new ContratacionController();
 $loginController = new LoginController();
 $puestosController = new PuestosController();
-$expedientesController = new ExpedientesController();
-
-
 $action = filter_input(INPUT_GET, 'action') ?: 'index';
 
 try {
@@ -42,10 +38,6 @@ try {
         'puestos-consultar' => $puestosController->consultar(),
         'puestos-editar' => $puestosController->editar(),
         'puestos-estado' => $puestosController->cambiarEstado(),
-        'expedientes' => $expedientesController->index(),
-        'expediente-crear' => $expedientesController->crear(),
-        'expediente-consultar' => $expedientesController->consultar(),
-        'expediente-editar' => $expedientesController->editar(),
         'detalle-oferente-core8' => $detalleOferenteController->detalle(),
         'detalle-oferente', 'detalleOferente' =>
             $contratacionController->detalleOferente(),
