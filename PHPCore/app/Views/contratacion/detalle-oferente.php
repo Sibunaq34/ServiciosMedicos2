@@ -16,7 +16,6 @@ $valor = static function (array $fila, string $campo): string {
         <div>
             <p class="section-kicker mb-2">Contratación</p>
             <h1 class="h3 mb-1">Detalle de oferente</h1>
-            <p class="text-secondary mb-0">Información obtenida mediante CORE8.</p>
         </div>
         <a class="btn btn-outline-secondary" href="<?= e($volver) ?>">Cancelar</a>
     </div>
