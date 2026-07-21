@@ -6,9 +6,6 @@ $volver = $codigoPuesto !== ''
     ? url('listado-oferentes', ['codigo_puesto' => $codigoPuesto])
     : url('index');
 
-$valor = static function (array $fila, string $campo): string {
-    return (string) ($fila[$campo] ?? $fila[ucfirst($campo)] ?? '');
-};
 ?>
 
 <section class="oferente-detalle">
@@ -33,6 +30,13 @@ $valor = static function (array $fila, string $campo): string {
     <?php elseif ($oferente === null): ?>
         <div class="alert alert-warning">No se encontró el oferente solicitado.</div>
     <?php else: ?>
+        <?php
+        $puesto = is_array($oferente['puesto'] ?? null) ? $oferente['puesto'] : null;
+        $curriculum = is_array($oferente['curriculum'] ?? null) ? $oferente['curriculum'] : null;
+        $codigoPuestoCreacion = $codigoPuesto !== ''
+            ? $codigoPuesto
+            : (string) ($puesto['codigo_puesto'] ?? '');
+        ?>
         <article class="card mb-4">
             <div class="card-body p-4">
                 <h2 class="h4 mb-3"><?= e($oferente['nombre_completo']) ?></h2>
@@ -43,8 +47,6 @@ $valor = static function (array $fila, string $campo): string {
                     <dd class="col-sm-8"><?= e($oferente['tipo_identificacion']) ?></dd>
                     <dt class="col-sm-4">Fecha de nacimiento</dt>
                     <dd class="col-sm-8"><?= e($oferente['fecha_nacimiento']) ?></dd>
-                    <dt class="col-sm-4">Fecha de registro</dt>
-                    <dd class="col-sm-8"><?= e($oferente['fecha_registro']) ?></dd>
                 </dl>
             </div>
         </article>
@@ -78,80 +80,53 @@ $valor = static function (array $fila, string $campo): string {
             </div>
         </div>
 
-        <article class="card mb-4">
-            <div class="card-header">Preparación académica</div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead><tr><th>Institución</th><th>Título</th><th>Inicio</th><th>Fin</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($oferente['preparacion_academica'] as $fila): ?>
-                        <tr>
-                            <td><?= e($valor($fila, 'institucion')) ?></td>
-                            <td><?= e($valor($fila, 'titulo')) ?></td>
-                            <td><?= e($valor($fila, 'fecha_inicio')) ?></td>
-                            <td><?= e($valor($fila, 'fecha_fin')) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <?php if ($oferente['preparacion_academica'] === []): ?>
-                        <tr><td colspan="4" class="text-secondary">Sin información registrada.</td></tr>
-                    <?php endif; ?>
-                    </tbody>
-                </table>
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <article class="card h-100">
+                    <div class="card-header">Puesto seleccionado</div>
+                    <div class="card-body">
+                        <?php if ($puesto === null): ?>
+                            <p class="text-secondary mb-0">Sin puesto asociado.</p>
+                        <?php else: ?>
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4">Código</dt>
+                                <dd class="col-sm-8"><?= e((string) ($puesto['codigo_puesto'] ?? '')) ?></dd>
+                                <dt class="col-sm-4">Nombre</dt>
+                                <dd class="col-sm-8 mb-0"><?= e((string) ($puesto['nombre_puesto'] ?? '')) ?></dd>
+                            </dl>
+                        <?php endif; ?>
+                    </div>
+                </article>
             </div>
-        </article>
-
-        <article class="card mb-4">
-            <div class="card-header">Experiencia laboral</div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead><tr><th>Empresa</th><th>Puesto</th><th>Inicio</th><th>Fin</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($oferente['experiencia_laboral'] as $fila): ?>
-                        <tr>
-                            <td><?= e($valor($fila, 'empresa')) ?></td>
-                            <td><?= e($valor($fila, 'puesto')) ?></td>
-                            <td><?= e($valor($fila, 'fecha_inicio')) ?></td>
-                            <td><?= e($valor($fila, 'fecha_fin')) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <?php if ($oferente['experiencia_laboral'] === []): ?>
-                        <tr><td colspan="4" class="text-secondary">Sin información registrada.</td></tr>
-                    <?php endif; ?>
-                    </tbody>
-                </table>
+            <div class="col-lg-6">
+                <article class="card h-100">
+                    <div class="card-header">Currículo</div>
+                    <div class="card-body">
+                        <?php if ($curriculum === null): ?>
+                            <p class="text-secondary mb-0">Sin currículo registrado.</p>
+                        <?php else: ?>
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4">Archivo</dt>
+                                <dd class="col-sm-8"><?= e((string) ($curriculum['nombre_archivo'] ?? '')) ?></dd>
+                                <dt class="col-sm-4">Tipo</dt>
+                                <dd class="col-sm-8"><?= e((string) ($curriculum['mime'] ?? '')) ?></dd>
+                                <dt class="col-sm-4">Tamaño</dt>
+                                <dd class="col-sm-8 mb-0"><?= e((string) ($curriculum['tamanio_formateado'] ?? '')) ?></dd>
+                            </dl>
+                        <?php endif; ?>
+                    </div>
+                </article>
             </div>
-        </article>
-
-        <article class="card mb-4">
-            <div class="card-header">Concursos</div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead><tr><th>Código</th><th>Concurso</th><th>Estado</th><th>Asignación</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($oferente['participaciones'] as $fila): ?>
-                        <tr>
-                            <td><?= e($valor($fila, 'codigo_concurso')) ?></td>
-                            <td><?= e($valor($fila, 'nombre_concurso')) ?></td>
-                            <td><?= e($valor($fila, 'estado')) ?></td>
-                            <td><?= e($valor($fila, 'fecha_asignacion')) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <?php if ($oferente['participaciones'] === []): ?>
-                        <tr><td colspan="4" class="text-secondary">Sin información registrada.</td></tr>
-                    <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </article>
+        </div>
 
         <?php if ($yaEsEmpleado): ?>
             <div class="alert alert-info">Este oferente ya fue convertido en empleado.</div>
-        <?php elseif ($codigoPuesto !== ''): ?>
+        <?php elseif ($codigoPuestoCreacion !== ''): ?>
             <form method="post" action="<?= e(url('crear-empleado')) ?>"
                   onsubmit="this.querySelector('button[type=submit]').disabled=true">
                 <input type="hidden" name="_csrf" value="<?= e($csrfToken) ?>">
                 <input type="hidden" name="id_oferente" value="<?= e((string) $oferente['id_oferente']) ?>">
-                <input type="hidden" name="codigo_puesto" value="<?= e($codigoPuesto) ?>">
+                <input type="hidden" name="codigo_puesto" value="<?= e($codigoPuestoCreacion) ?>">
                 <div class="d-flex gap-2">
                     <button class="btn btn-primary" type="submit">Crear empleado</button>
                     <a class="btn btn-outline-secondary" href="<?= e($volver) ?>">Cancelar</a>
