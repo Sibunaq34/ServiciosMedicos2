@@ -21,7 +21,7 @@ $oferentesController = new OferentesController();
 $contratacionController = new ContratacionController();
 $loginController = new LoginController();
 $puestosController = new PuestosController();
-$action = filter_input(INPUT_GET, 'action') ?: 'index';
+$action = filter_input(INPUT_GET, 'action') ?: 'login';
 
 try {
     if (!in_array($action, ['login', 'procesar-login'], true)) {
