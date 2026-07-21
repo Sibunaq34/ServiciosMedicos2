@@ -301,6 +301,27 @@ BEGIN
 
   SET vIdOferentePuesto = LAST_INSERT_ID();
 
+  -- Persona C - Kenneth
+  -- Asigna requisitos activos del puesto como cumplidos en la misma transaccion.
+  INSERT INTO `oferente_requisito` (
+    `id_oferente`,
+    `id_requisito`,
+    `cumple`
+  )
+  SELECT
+    vIdOferente,
+    `rp`.`id_requisito`,
+    1
+  FROM `requisitos_puesto` AS `rp`
+  WHERE `rp`.`id_puesto` = vIdPuesto
+    AND `rp`.`activo` = 1
+    AND NOT EXISTS (
+      SELECT 1
+      FROM `oferente_requisito` AS `ore`
+      WHERE `ore`.`id_oferente` = vIdOferente
+        AND `ore`.`id_requisito` = `rp`.`id_requisito`
+    );
+
   SET vRegistro = JSON_OBJECT(
     'idPersona', vIdPersona,
     'idOferente', vIdOferente,
@@ -343,3 +364,29 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- Persona C - Kenneth
+-- Migra postulaciones existentes hacia requisitos activos no registrados.
+START TRANSACTION;
+
+INSERT INTO `oferente_requisito` (
+  `id_oferente`,
+  `id_requisito`,
+  `cumple`
+)
+SELECT
+  `op`.`id_oferente`,
+  `rp`.`id_requisito`,
+  1
+FROM `oferente_puesto` AS `op`
+INNER JOIN `requisitos_puesto` AS `rp`
+  ON `rp`.`id_puesto` = `op`.`id_puesto`
+WHERE `rp`.`activo` = 1
+  AND NOT EXISTS (
+    SELECT 1
+    FROM `oferente_requisito` AS `ore`
+    WHERE `ore`.`id_oferente` = `op`.`id_oferente`
+      AND `ore`.`id_requisito` = `rp`.`id_requisito`
+  );
+
+COMMIT;
