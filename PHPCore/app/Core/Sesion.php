@@ -73,6 +73,11 @@ final class Sesion
         return is_array($_SESSION['autenticacion'] ?? null) ? $_SESSION['autenticacion'] : [];
     }
 
+    public static function usuarioId(): int
+    {
+        return (int) (self::usuario()['id_usuario'] ?? 0);
+    }
+
     public static function esAdministrador(): bool
     {
         $usuario = self::usuario();

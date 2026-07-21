@@ -19,9 +19,7 @@ $volver = $codigoPuesto !== ''
 
     <?php if ($mensajeExito): ?>
         <div class="alert alert-success" role="status"><?= e((string) $mensajeExito) ?></div>
-    <?php endif; ?>
-
-    <?php if ($mensajeError): ?>
+    <?php elseif ($mensajeError): ?>
         <div class="alert alert-danger" role="alert"><?= e((string) $mensajeError) ?></div>
     <?php endif; ?>
 
@@ -119,7 +117,7 @@ $volver = $codigoPuesto !== ''
             </div>
         </div>
 
-        <?php if ($yaEsEmpleado): ?>
+        <?php if ($yaEsEmpleado && !$mensajeExito && !$mensajeError): ?>
             <div class="alert alert-info">Este oferente ya fue convertido en empleado.</div>
         <?php elseif ($codigoPuestoCreacion !== ''): ?>
             <form method="post" action="<?= e(url('crear-empleado')) ?>"

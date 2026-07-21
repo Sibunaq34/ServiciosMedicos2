@@ -51,10 +51,15 @@ final class EmpleadoRepository
             throw new RuntimeException('El servicio de empleados devolvió una respuesta inválida.');
         }
 
+        $mensaje = trim((string) ($resultado->Mensaje ?? ''));
+        if ($mensaje === '') {
+            $mensaje = 'No fue posible crear el empleado.';
+        }
+
         return [
             'exito' => (bool) ($resultado->Exito ?? false),
             'codigo' => (string) ($resultado->Codigo ?? 'INTERNAL_ERROR'),
-            'mensaje' => (string) ($resultado->Mensaje ?? 'No fue posible crear el empleado.'),
+            'mensaje' => $mensaje,
             'idEmpleado' => isset($resultado->IdEmpleado) ? (int) $resultado->IdEmpleado : null,
             'numeroEmpleado' => (string) ($resultado->NumeroEmpleado ?? ''),
         ];
