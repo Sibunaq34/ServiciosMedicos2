@@ -57,7 +57,10 @@
                         <i class="bi bi-list"></i>
                     </button>
                     <div class="d-flex align-items-center gap-3 ms-auto user-session-area">
-                        <span class="text-truncate text-dark fw-semibold"><?= e($usuarioSesion['nombre_completo'] ?? '') ?></span>
+                        <div class="user-avatar-pill">
+                            <span class="user-avatar-badge" aria-hidden="true"><i class="bi bi-person-fill"></i></span>
+                            <span class="text-truncate text-dark fw-semibold"><?= e($usuarioSesion['nombre_completo'] ?? '') ?></span>
+                        </div>
                         <a class="btn btn-link btn-sm text-decoration-none" href="<?= e(url('logout')) ?>">Cerrar sesión</a>
                     </div>
                 </div>

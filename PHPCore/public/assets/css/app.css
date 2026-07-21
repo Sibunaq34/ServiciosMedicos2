@@ -319,6 +319,30 @@ footer {
     align-items: center;
 }
 
+.user-avatar-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    padding: .35rem .6rem;
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    background: #F8FAFC;
+}
+
+.user-avatar-badge {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--app-primary-light);
+    color: var(--app-primary);
+}
+
+.user-avatar-badge i {
+    font-size: 1rem;
+}
+
 .offcanvas-sidebar .offcanvas-body {
     background: var(--app-primary);
     color: #fff;
