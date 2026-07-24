@@ -22,7 +22,7 @@
     <div class="col-auto">
         <label for="codigoPuestoInput" class="visually-hidden">Código del puesto</label>
         <input type="text" class="form-control" id="codigoPuestoInput" name="codigo_puesto"
-               placeholder="Código del puesto (ej. GER001)" value="<?= e($codigoPuesto) ?>">
+               placeholder="Código del puesto (ej. MED-GEN)" value="<?= e((string) $codigoPuesto) ?>">
     </div>
     <div class="col-auto">
         <button type="submit" class="btn btn-primary">Buscar</button>

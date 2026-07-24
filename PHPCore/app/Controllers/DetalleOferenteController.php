@@ -32,7 +32,7 @@ final class DetalleOferenteController
         }
 
         render('oferentes/detalle-core8', [
-            'title' => 'Detalle completo de oferente',
+            'title' => 'Detalle de oferente',
             'idOferente' => $idOferente,
             'detalle' => $detalle,
             'error' => $error,

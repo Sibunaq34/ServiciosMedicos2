@@ -46,4 +46,11 @@ final class Validador
 
         return $pagina;
     }
+
+    public static function idPositivo(mixed $valor): ?int
+    {
+        $id = filter_var($valor, FILTER_VALIDATE_INT);
+
+        return $id !== false && $id > 0 ? $id : null;
+    }
 }
