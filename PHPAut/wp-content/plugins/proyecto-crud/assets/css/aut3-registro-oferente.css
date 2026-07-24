@@ -22,21 +22,6 @@
     background: Canvas;
 }
 
-.aut3-header {
-    margin-bottom: 1.5rem;
-}
-
-.aut3-kicker {
-    margin: 0 0 .25rem;
-    font-size: .875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.aut3-header h2 {
-    margin: 0;
-}
-
 .aut3-form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

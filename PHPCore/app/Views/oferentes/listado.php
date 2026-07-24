@@ -1,23 +1,3 @@
-<?php
-/**
- * Vista: Listado de Oferentes (HU CORE7)
- *
- * Variables recibidas desde OferenteController::listadoOferentes():
- *   string|null $error
- *   array       $oferentes     (página actual, máx. 10)
- *   string|null $codigoPuesto
- *   int         $paginaActual
- *   int         $totalPaginas
- *
- * El nombre enlaza a 'detalle-oferente' (HU CORE9, ya implementada).
- *
- * Enlace pendiente de HU no implementada todavía:
- *   - 'listadoPuestos' -> HU CORE6 (listado de puestos)
- * Se usa aquí como placeholder con el mismo helper url() del proyecto;
- * cuando esa HU exista, solo hace falta que el 'action' coincida.
- */
-?>
-
 <h1>Listado de Oferentes</h1>
 
 <form method="get" action="<?= e(url('listado-oferentes')) ?>" class="row g-2 mb-3">
@@ -25,7 +5,7 @@
     <div class="col-auto">
         <label for="codigoPuestoInput" class="visually-hidden">Código del puesto</label>
         <input type="text" class="form-control" id="codigoPuestoInput" name="codigo_puesto"
-               placeholder="Código del puesto (ej. GER001)" value="<?= e($codigoPuesto) ?>">
+               placeholder="Código del puesto (ej. MED-GEN)" value="<?= e((string) $codigoPuesto) ?>">
     </div>
     <div class="col-auto">
         <button type="submit" class="btn btn-primary">Buscar</button>
@@ -53,7 +33,10 @@
                 <?php foreach ($oferentes as $oferente): ?>
                 <tr>
                     <td>
-                        <a href="<?= e(url('detalle-oferente', ['id' => $oferente['id_oferente']])) ?>">
+                        <a href="<?= e(url('detalle-oferente', [
+                            'id' => $oferente['id_oferente'],
+                            'codigo_puesto' => $codigoPuesto,
+                        ])) ?>">
                             <?= e($oferente['nombre_completo']) ?>
                         </a>
                     </td>
@@ -82,4 +65,4 @@
 
 <?php endif; ?>
 
-<a href="<?= e(url('listadoPuestos')) ?>" class="btn btn-secondary">Regresar</a>
+<a href="<?= e(url('puestos')) ?>" class="btn btn-secondary">Regresar</a>

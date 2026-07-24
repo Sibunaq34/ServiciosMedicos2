@@ -100,7 +100,7 @@ function aut3_registro_oferente_obtener_puesto()
     if ($codigoPuesto === '' && $nombrePuesto === '') {
         return [
             'codigo' => '',
-            'nombre' => 'Seleccione un puesto disponible desde AUT2',
+            'nombre' => '',
         ];
     }
 
