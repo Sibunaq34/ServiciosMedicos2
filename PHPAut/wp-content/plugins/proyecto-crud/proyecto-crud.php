@@ -184,11 +184,11 @@ function aut2_obtener_url_registro_oferente()
     return home_url('/');
 }
 
-function aut2_construir_url_aut3($urlAut3, $codigoPuesto, $nombrePuesto, $urlRetorno)
+function aut2_construir_url_aut3($urlAut3, $nombrePuesto, $urlRetorno)
 {
     
     $query = [
-        'codigo_puesto' => rawurlencode($codigoPuesto),
+        
         'nombre_puesto' => rawurlencode($nombrePuesto),
         'url_retorno'   => rawurlencode($urlRetorno),
     ];
@@ -216,26 +216,8 @@ function aut2_puestos_disponibles_shortcode()
     $aut2UrlActual = home_url(add_query_arg(null, null));
 
     ob_start();
-    ?>
-    <section class="aut2-puestos-disponibles">
-        <?php if (empty($aut2Puestos)): ?>
-            <p class="aut2-vacio">No hay puestos disponibles en este momento.</p>
-        <?php else: ?>
-            <div class="aut2-grid">
-                <?php foreach ($aut2Puestos as $aut2Puesto): ?>
-                    <?php
-                    $aut2Codigo = (string) $aut2Puesto['codigo_puesto'];
-                    $aut2Nombre = (string) $aut2Puesto['nombre_puesto'];
-                    $aut2Href = aut2_construir_url_aut3($aut2UrlAut3, $aut2Codigo, $aut2Nombre, $aut2UrlActual);
-                    ?>
-                    <a class="aut2-card" href="<?php echo esc_url($aut2Href); ?>">
-                        <span class="aut2-card-nombre"><?php echo esc_html($aut2Nombre); ?></span>
-                        <span class="aut2-card-codigo"><?php echo esc_html($aut2Codigo); ?></span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </section>
-    <?php
+
+    include plugin_dir_path(__FILE__) . 'templates/puestos-disponibles.php';
+
     return ob_get_clean();
 }
