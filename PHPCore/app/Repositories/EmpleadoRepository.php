@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Config\WebService;
-use App\Core\ServicioSoap;
+use App\Core\SoapService;
 use RuntimeException;
 
 final class EmpleadoRepository
@@ -16,7 +16,7 @@ final class EmpleadoRepository
             return false;
         }
 
-        $respuesta = (new ServicioSoap(WebService::EMPLEADOS))
+        $respuesta = (new SoapService(WebService::EMPLEADOS))
             ->call('OferenteEsEmpleado', ['idOferente' => $idOferente]);
 
         return (bool) ($respuesta->OferenteEsEmpleadoResult ?? false);
@@ -34,7 +34,7 @@ final class EmpleadoRepository
             throw new RuntimeException('El código de puesto es requerido.');
         }
 
-        $respuesta = (new ServicioSoap(WebService::EMPLEADOS))
+        $respuesta = (new SoapService(WebService::EMPLEADOS))
             ->call('RegistrarEmpleado', ['entrada' => $solicitud]);
 
         $resultado = $this->extraer($respuesta, 'RegistrarEmpleadoResult');

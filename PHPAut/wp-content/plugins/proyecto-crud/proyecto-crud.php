@@ -15,6 +15,9 @@ require_once plugin_dir_path(__FILE__) . 'includes/repository/BitacoraRepository
 require_once plugin_dir_path(__FILE__) . 'includes/repository/RegistroOferenteRepository.php';
 require_once plugin_dir_path(__FILE__) . 'includes/services/RegistroOferenteService.php';
 require_once plugin_dir_path(__FILE__) . 'includes/controllers/RegistroOferenteController.php';
+require_once plugin_dir_path(__FILE__) . 'includes/repository/PuestosDisponiblesRepository.php';
+require_once plugin_dir_path(__FILE__) . 'includes/services/PuestosDisponiblesService.php';
+require_once plugin_dir_path(__FILE__) . 'includes/controllers/PuestosDisponiblesController.php';
 
 add_shortcode('bitacoras', 'mostrarBitacoras');
 
@@ -148,54 +151,6 @@ const AUT2_PUESTOS_DISPONIBLES_VERSION = '0.1.0';
 
 add_shortcode('puestos_disponibles_aut2', 'aut2_puestos_disponibles_shortcode');
 
-function aut2_obtener_puestos_disponibles()
-{
-    try {
-        $conexion = ConexionBD::obtenerConexion();
-
-        $stmt = $conexion->prepare(
-            'SELECT codigo_puesto, nombre_puesto FROM puestos WHERE activo = :activo ORDER BY nombre_puesto ASC'
-        );
-
-        $stmt->execute([':activo' => 1]);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        error_log('aut2_obtener_puestos_disponibles: ' . $e->getMessage());
-
-        return [];
-    }
-}
-
-function aut2_obtener_url_registro_oferente()
-{
-    // La URL de Aut3 se resuelve en tiempo de ejecucion 
-    // Se busca por slug en vez de fijar el post ID para no depender de que
-    $pagina = get_page_by_path('registro-de-oferente', OBJECT, 'page');
-
-    if ($pagina instanceof WP_Post) {
-        $permalink = get_permalink($pagina);
-
-        if ($permalink) {
-            return $permalink;
-        }
-    }
-
-    return home_url('/');
-}
-
-function aut2_construir_url_aut3($urlAut3, $nombrePuesto, $urlRetorno)
-{
-    
-    $query = [
-        
-        'nombre_puesto' => rawurlencode($nombrePuesto),
-        'url_retorno'   => rawurlencode($urlRetorno),
-    ];
-
-    return esc_url(add_query_arg($query, $urlAut3));
-}
-
 function aut2_puestos_disponibles_enqueue_assets()
 {
     // No hace falta JS: el listado es solo enlaces, sin interactividad.
@@ -211,9 +166,8 @@ function aut2_puestos_disponibles_shortcode()
 {
     aut2_puestos_disponibles_enqueue_assets();
 
-    $aut2Puestos = aut2_obtener_puestos_disponibles();
-    $aut2UrlAut3 = aut2_obtener_url_registro_oferente();
-    $aut2UrlActual = home_url(add_query_arg(null, null));
+    $controller = new PuestosDisponiblesController();
+    $aut2Puestos = $controller->obtenerDatosListado();
 
     ob_start();
 
