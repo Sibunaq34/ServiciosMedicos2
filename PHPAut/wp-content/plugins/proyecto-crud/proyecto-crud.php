@@ -11,7 +11,6 @@ if (!defined('ABSPATH')) {
 }
 
 require_once plugin_dir_path(__FILE__) . 'includes/config/ConexionBD.php';
-require_once plugin_dir_path(__FILE__) . 'includes/repository/BitacoraRepository.php';
 require_once plugin_dir_path(__FILE__) . 'includes/repository/RegistroOferenteRepository.php';
 require_once plugin_dir_path(__FILE__) . 'includes/services/RegistroOferenteService.php';
 require_once plugin_dir_path(__FILE__) . 'includes/controllers/RegistroOferenteController.php';
@@ -19,19 +18,6 @@ require_once plugin_dir_path(__FILE__) . 'includes/repository/PuestosDisponibles
 require_once plugin_dir_path(__FILE__) . 'includes/services/PuestosDisponiblesService.php';
 require_once plugin_dir_path(__FILE__) . 'includes/controllers/PuestosDisponiblesController.php';
 
-add_shortcode('bitacoras', 'mostrarBitacoras');
-
-function mostrarBitacoras()
-{
-    $repo = new BitacoraRepository();
-    $bitacoras = $repo->consultar();
-
-    ob_start();
-
-    include plugin_dir_path(__FILE__) . 'templates/bitacoras.php';
-
-    return ob_get_clean();
-}
 
 // Persona C - Kenneth
 // Inicio de la integracion funcional de AUT3.
