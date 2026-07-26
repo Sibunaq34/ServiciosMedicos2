@@ -384,3 +384,61 @@ footer {
         gap: .45rem;
     }
 }
+
+
+/* ==========================
+   Tablas dentro de table-shell
+========================== */
+
+.table-shell {
+    max-width: 700px;
+}
+
+.table-shell .card {
+    width: auto;
+    max-width: 100%;
+}
+
+.table-shell .table {
+    width: auto;
+    min-width: 420px; /* solo aplica en escritorio, ver override abajo */
+}
+
+.table-shell th,
+.table-shell td {
+    white-space: nowrap;
+}
+
+/* Separación respecto al menú lateral */
+.app-main {
+    padding: 1.75rem 2rem;
+}
+
+/* ==========================
+   Responsive: tablets
+========================== */
+@media (max-width: 767.98px) {
+    .table-shell .card {
+        display: block;   /* que ocupe el ancho disponible, no inline-block */
+        width: 100%;
+    }
+
+    .table-shell .table {
+        min-width: 100%;  /* la tabla se adapta al contenedor, no fuerza scroll */
+    }
+}
+
+/* ==========================
+   Responsive: móviles
+========================== */
+@media (max-width: 575.98px) {
+    .app-main {
+        padding: 1rem 1rem;
+    }
+
+    .table-shell th,
+    .table-shell td {
+        white-space: normal;  /* permite que el texto haga wrap en vez de desbordar */
+        padding: .85rem 1rem;
+    }
+}

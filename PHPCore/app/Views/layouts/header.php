@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </nav>
-            <main class="app-main py-4 py-lg-5">
+            <main class="app-main py-4 py-lg-5 px-4 px-lg-5">
     <?php else: ?>
             <main class="container py-4 py-lg-5">
     <?php endif; ?>
