@@ -68,60 +68,80 @@ final class DetalleOferenteRepository
     {
         return [
             'id_oferente' => $this->valor($datos, 'IdOferente'),
-            'id_persona' => $this->valor($datos, 'IdPersona'),
             'identificacion' => $this->valor($datos, 'Identificacion'),
             'tipo_identificacion' => $this->valor($datos, 'TipoIdentificacion'),
             'nombre_completo' => $this->valor($datos, 'NombreCompleto'),
             'fecha_nacimiento' => $this->fecha($this->valor($datos, 'FechaNacimiento')),
-            'fecha_registro' => $this->fecha($this->valor($datos, 'FechaRegistro')),
             'correos' => $this->normalizarLista($datos->Correos ?? null, 'string'),
             'telefonos' => $this->normalizarLista($datos->Telefonos ?? null, 'string'),
-            'preparacion_academica' => array_map(
-                fn(object $item): array => $this->normalizarPreparacion($item),
-                $this->normalizarLista($datos->PreparacionAcademica ?? null, 'PreparacionAcademicaDetalleCore8')
-            ),
-            'experiencia_laboral' => array_map(
-                fn(object $item): array => $this->normalizarExperiencia($item),
-                $this->normalizarLista($datos->ExperienciaLaboral ?? null, 'ExperienciaLaboralDetalleCore8')
-            ),
-            'participaciones' => array_map(
-                fn(object $item): array => $this->normalizarParticipacion($item),
-                $this->normalizarLista($datos->Participaciones ?? null, 'ParticipacionConcursoDetalleCore8')
-            ),
+            'puesto' => $this->normalizarPuesto($datos->Puesto ?? null),
+            'curriculum' => $this->normalizarCurriculum($datos->Curriculum ?? null),
         ];
     }
 
-    private function normalizarPreparacion(object $item): array
+    private function normalizarPuesto(mixed $item): ?array
     {
+        if (!is_object($item)) {
+            return null;
+        }
+
+        $codigo = $this->valor($item, 'CodigoPuesto');
+        $nombre = $this->valor($item, 'NombrePuesto');
+
+        if ($codigo === '' && $nombre === '') {
+            return null;
+        }
+
         return [
-            'codigo_institucion' => $this->valor($item, 'CodigoInstitucion'),
-            'institucion' => $this->valor($item, 'NombreInstitucion'),
-            'titulo' => $this->valor($item, 'Titulo'),
-            'fecha_inicio' => $this->fecha($this->valor($item, 'FechaInicio')),
-            'fecha_fin' => $this->fecha($this->valor($item, 'FechaFin')),
+            'codigo_puesto' => $codigo,
+            'nombre_puesto' => $nombre,
         ];
     }
 
-    private function normalizarExperiencia(object $item): array
+    private function normalizarCurriculum(mixed $item): ?array
     {
+        if (!is_object($item)) {
+            return null;
+        }
+
+        $nombre = $this->valor($item, 'NombreArchivo');
+        $mime = $this->valor($item, 'Mime');
+        $tamanio = $this->entero($item, 'Tamanio');
+
+        if ($nombre === '' && $mime === '' && $tamanio === 0) {
+            return null;
+        }
+
         return [
-            'empresa' => $this->valor($item, 'NombreEmpresa'),
-            'puesto' => $this->valor($item, 'PuestoDesempenado'),
-            'fecha_inicio' => $this->fecha($this->valor($item, 'FechaInicio')),
-            'fecha_fin' => $this->fecha($this->valor($item, 'FechaFin')),
+            'nombre_archivo' => $nombre,
+            'mime' => $mime,
+            'tamanio' => $tamanio,
+            'tamanio_formateado' => $this->formatearBytes($tamanio),
         ];
     }
 
-    private function normalizarParticipacion(object $item): array
+    private function entero(object $objeto, string $propiedad): int
     {
-        return [
-            'codigo_concurso' => $this->valor($item, 'CodigoConcurso'),
-            'nombre_concurso' => $this->valor($item, 'NombreConcurso'),
-            'estado' => $this->valor($item, 'Estado'),
-            'fecha_inicio' => $this->fecha($this->valor($item, 'FechaInicio')),
-            'fecha_fin' => $this->fecha($this->valor($item, 'FechaFin')),
-            'fecha_asignacion' => $this->fecha($this->valor($item, 'FechaAsignacion')),
-        ];
+        $valor = $objeto->{$propiedad} ?? 0;
+
+        return is_numeric($valor) ? max(0, (int) $valor) : 0;
+    }
+
+    private function formatearBytes(int $bytes): string
+    {
+        if ($bytes <= 0) {
+            return '';
+        }
+
+        if ($bytes < 1024) {
+            return $bytes . ' B';
+        }
+
+        if ($bytes < 1048576) {
+            return number_format($bytes / 1024, 1) . ' KB';
+        }
+
+        return number_format($bytes / 1048576, 1) . ' MB';
     }
 
     /**

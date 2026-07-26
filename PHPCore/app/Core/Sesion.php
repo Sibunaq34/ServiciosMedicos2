@@ -73,6 +73,20 @@ final class Sesion
         return is_array($_SESSION['autenticacion'] ?? null) ? $_SESSION['autenticacion'] : [];
     }
 
+    public static function usuarioId(): int
+    {
+        return (int) (self::usuario()['id_usuario'] ?? 0);
+    }
+
+    public static function esAdministrador(): bool
+    {
+        $usuario = self::usuario();
+        $rol = mb_strtolower(trim((string) ($usuario['nombre_rol'] ?? '')));
+
+        return (int) ($usuario['id_rol'] ?? 0) === 1
+            || str_contains($rol, 'admin');
+    }
+
     public static function requerirAutenticacion(): void
     {
         if (!self::estaAutenticado()) {

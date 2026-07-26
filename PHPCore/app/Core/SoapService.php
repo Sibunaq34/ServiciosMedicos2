@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use RuntimeException;
 use SoapClient;
 use SoapFault;
-use RuntimeException;
 
-final class SoapService
+class SoapService
 {
     private SoapClient $cliente;
 
@@ -19,7 +19,7 @@ final class SoapService
         }
 
         $this->cliente = new SoapClient($wsdl, [
-            'trace' => true,
+            'trace' => false,
             'exceptions' => true,
             'cache_wsdl' => WSDL_CACHE_NONE,
             'connection_timeout' => 10,

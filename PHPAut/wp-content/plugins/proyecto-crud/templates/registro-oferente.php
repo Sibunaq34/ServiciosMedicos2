@@ -8,11 +8,6 @@ $aut3_id_formulario = 'aut3-' . wp_unique_id();
 
 <section class="aut3-registro-oferente" data-aut3-registro-oferente data-url-retorno="<?php echo esc_url($aut3_url_retorno); ?>">
     <div class="aut3-card">
-        <header class="aut3-header">
-            <p class="aut3-kicker">AUT3</p>
-            <h2>Registro de oferente</h2>
-        </header>
-
         <?php
         // Persona C - Kenneth
         // Formulario visual de AUT3.
@@ -69,14 +64,14 @@ $aut3_id_formulario = 'aut3-' . wp_unique_id();
 
             <div class="aut3-field">
                 <label for="<?php echo esc_attr($aut3_id_formulario); ?>-correos">Correo o correos</label>
-                <textarea id="<?php echo esc_attr($aut3_id_formulario); ?>-correos" name="correos" rows="3" inputmode="email" placeholder="correo@ejemplo.com" aria-describedby="<?php echo esc_attr($aut3_id_formulario); ?>-help-correos <?php echo esc_attr($aut3_id_formulario); ?>-error-correos"></textarea>
+                <textarea id="<?php echo esc_attr($aut3_id_formulario); ?>-correos" name="correos" rows="3" inputmode="email" aria-describedby="<?php echo esc_attr($aut3_id_formulario); ?>-help-correos <?php echo esc_attr($aut3_id_formulario); ?>-error-correos"></textarea>
                 <p id="<?php echo esc_attr($aut3_id_formulario); ?>-help-correos" class="aut3-help">Separe varios correos con comas.</p>
                 <p id="<?php echo esc_attr($aut3_id_formulario); ?>-error-correos" class="aut3-error" data-error-for="correos" aria-live="polite"></p>
             </div>
 
             <div class="aut3-field">
                 <label for="<?php echo esc_attr($aut3_id_formulario); ?>-telefonos">Tel&eacute;fono o tel&eacute;fonos</label>
-                <textarea id="<?php echo esc_attr($aut3_id_formulario); ?>-telefonos" name="telefonos" rows="3" inputmode="tel" required placeholder="8888-8888" aria-describedby="<?php echo esc_attr($aut3_id_formulario); ?>-help-telefonos <?php echo esc_attr($aut3_id_formulario); ?>-error-telefonos"></textarea>
+                <textarea id="<?php echo esc_attr($aut3_id_formulario); ?>-telefonos" name="telefonos" rows="3" inputmode="tel" required aria-describedby="<?php echo esc_attr($aut3_id_formulario); ?>-help-telefonos <?php echo esc_attr($aut3_id_formulario); ?>-error-telefonos"></textarea>
                 <p id="<?php echo esc_attr($aut3_id_formulario); ?>-help-telefonos" class="aut3-help">Separe varios tel&eacute;fonos con comas.</p>
                 <p id="<?php echo esc_attr($aut3_id_formulario); ?>-error-telefonos" class="aut3-error" data-error-for="telefonos" aria-live="polite"></p>
             </div>

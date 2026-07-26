@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title id="title">Servicios Médicos</title>
+  <rect width="160" height="160" rx="32" fill="#12375c"/>
+  <circle cx="80" cy="80" r="52" fill="#eaf2f8"/>
+  <path fill="#12375c" d="M68 43h24v25h25v24H92v25H68V92H43V68h25z"/>
+</svg>
