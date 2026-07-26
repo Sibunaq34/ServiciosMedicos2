@@ -22,7 +22,6 @@ $formatearMonto = static function (mixed $monto): string {
                 <i class="bi bi-briefcase-fill"></i>
             </span>
             <div>
-                <p class="section-kicker mb-2">Core 6</p>
                 <h1 id="core6-puestos-title" class="h3 mb-2">Puestos activos</h1>
                 <p class="text-secondary mb-0">Seleccione un puesto para consultar los oferentes que cumplen sus requisitos.</p>
             </div>
@@ -59,7 +58,6 @@ $formatearMonto = static function (mixed $monto): string {
                 <span class="core6-summary-icon" aria-hidden="true"><i class="bi bi-list-check"></i></span>
                 <div><strong><?= $cantidadMostrada ?></strong><span>mostrados en esta página</span></div>
             </div>
-            <p class="core6-summary-source mb-0"><i class="bi bi-cloud-check me-2" aria-hidden="true"></i>Información obtenida mediante el servicio Core 1</p>
         </div>
 
         <div class="card mt-4 overflow-hidden">
