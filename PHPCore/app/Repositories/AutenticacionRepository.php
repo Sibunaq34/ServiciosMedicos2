@@ -26,7 +26,13 @@ final class AutenticacionRepository
             $respuesta = $respuesta['LoginResult'];
         }
 
-        return [
+        if (!is_object($respuesta) && !is_array($respuesta)) {
+            error_log('El servicio de autenticación devolvió LoginResult vacío o con un formato inesperado.');
+
+            return $this->resultadoFallido();
+        }
+
+        $resultado = [
             'exito' => filter_var($this->valor($respuesta, ['Exito', 'exito'], false), FILTER_VALIDATE_BOOL),
             'mensaje' => (string) $this->valor($respuesta, ['Mensaje', 'mensaje'], ''),
             'idUsuario' => (int) $this->valor($respuesta, ['IdUsuario', 'idUsuario'], 0),
@@ -35,6 +41,38 @@ final class AutenticacionRepository
             'idRol' => (int) $this->valor($respuesta, ['IdRol', 'idRol'], 0),
             'nombreRol' => (string) $this->valor($respuesta, ['NombreRol', 'nombreRol'], ''),
             'estado' => (string) $this->valor($respuesta, ['Estado', 'estado'], ''),
+        ];
+
+        if ($resultado['exito'] && !$this->tieneDatosCompletos($resultado)) {
+            error_log('El servicio de autenticación indicó éxito, pero LoginResult no contiene todos los datos requeridos.');
+
+            return $this->resultadoFallido();
+        }
+
+        return $resultado;
+    }
+
+    private function tieneDatosCompletos(array $resultado): bool
+    {
+        return $resultado['idUsuario'] > 0
+            && trim($resultado['usuario']) !== ''
+            && trim($resultado['nombreCompleto']) !== ''
+            && $resultado['idRol'] > 0
+            && trim($resultado['nombreRol']) !== ''
+            && trim($resultado['estado']) !== '';
+    }
+
+    private function resultadoFallido(): array
+    {
+        return [
+            'exito' => false,
+            'mensaje' => 'Usuario y/o contraseña incorrectos.',
+            'idUsuario' => 0,
+            'usuario' => '',
+            'nombreCompleto' => '',
+            'idRol' => 0,
+            'nombreRol' => '',
+            'estado' => '',
         ];
     }
 

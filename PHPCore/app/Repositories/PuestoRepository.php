@@ -124,9 +124,10 @@ final class PuestoRepository
     {
         return [
             'id' => (int) $this->valor($registro, ['Id', 'IdPuesto', 'id', 'idPuesto'], 0),
-            'codigoPuesto' => (string) $this->valor($registro, ['CodigoPuesto', 'codigoPuesto'], ''),
-            'nombrePuesto' => (string) $this->valor($registro, ['NombrePuesto', 'nombrePuesto'], ''),
-            'descripcion' => (string) $this->valor($registro, ['Descripcion', 'descripcion'], ''),
+            'codigoPuesto' => (string) $this->valor($registro, ['CodigoPuesto', 'codigoPuesto', 'codigo_puesto'], ''),
+            'nombrePuesto' => (string) $this->valor($registro, ['NombrePuesto', 'nombrePuesto', 'nombre_puesto'], ''),
+            'montoSalario' => $this->valor($registro, ['MontoSalario', 'montoSalario', 'monto_salario'], null),
+            'jefatura' => (string) $this->valor($registro, ['Jefatura', 'jefatura'], ''),
             'estado' => strtolower((string) $this->valor($registro, ['Estado', 'estado'], 'activo')),
         ];
     }
