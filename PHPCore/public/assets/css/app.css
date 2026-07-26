@@ -438,11 +438,22 @@ footer {
     padding: 1rem;
 }
 
-.core6-summary-icon {
-    width: 2.6rem;
-    height: 2.6rem;
+.core6-summary-item .core6-summary-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
     border-radius: .75rem;
     background: var(--app-primary-light);
+    border-color: #C5D7E8;
+    font-size: 1.2rem;
+    box-shadow: inset 0 0 0 1px rgba(18, 55, 92, .04);
+}
+
+.core6-summary-item .core6-summary-icon i {
+    display: block;
+    line-height: 1;
+    -webkit-text-stroke: .2px currentColor;
 }
 
 .core6-summary-item strong,
