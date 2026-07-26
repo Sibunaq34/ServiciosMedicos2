@@ -109,6 +109,13 @@ function aut3_registro_oferente_obtener_puesto()
         }
     }
 
+    if ($nombrePuesto !== '') {
+        return [
+            'codigo' => $codigoPuesto,
+            'nombre' => $nombrePuesto,
+        ];
+    }
+
     return [
         'codigo' => $codigoPuesto,
         'nombre' => 'Puesto no disponible',

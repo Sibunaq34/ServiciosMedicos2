@@ -33,9 +33,10 @@ class PuestosDisponiblesService
         return home_url('/');
     }
 
-    public function construirUrlAut3(string $urlAut3, string $nombrePuesto, string $urlRetorno): string
+    public function construirUrlAut3(string $urlAut3, string $codigoPuesto, string $nombrePuesto, string $urlRetorno): string
     {
         $query = [
+            'codigo_puesto' => rawurlencode($codigoPuesto),
             'nombre_puesto' => rawurlencode($nombrePuesto),
             'url_retorno'   => rawurlencode($urlRetorno),
         ];

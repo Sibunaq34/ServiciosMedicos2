@@ -17,11 +17,12 @@ class PuestosDisponiblesController
         $urlAut3 = $this->service->obtenerUrlRegistroOferente();
 
         return array_map(function (array $puesto) use ($urlAut3, $urlActual): array {
-            $nombre = (string) $puesto['nombre_puesto'];
+            $codigo = (string) ($puesto['codigo_puesto'] ?? '');
+            $nombre = (string) ($puesto['nombre_puesto'] ?? '');
 
             return [
                 'nombre' => $nombre,
-                'href' => $this->service->construirUrlAut3($urlAut3, $nombre, $urlActual),
+                'href' => $this->service->construirUrlAut3($urlAut3, $codigo, $nombre, $urlActual),
             ];
         }, $this->service->obtenerPuestosDisponibles());
     }
