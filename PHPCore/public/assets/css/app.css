@@ -115,9 +115,12 @@ h5 {
 ========================== */
 
 .form-shell,
-.error-page,
-.table-shell {
+.error-page {
     max-width: 900px;
+}
+
+.table-shell {
+    max-width: 480px;
 }
 
 .form-label {

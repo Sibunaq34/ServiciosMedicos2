@@ -1,3 +1,5 @@
+
+
 <div class="card shadow-sm border-0">
     <div class="card-header"><h1 class="h4 mb-0">Puestos activos</h1></div>
     <div class="card-body p-0">
