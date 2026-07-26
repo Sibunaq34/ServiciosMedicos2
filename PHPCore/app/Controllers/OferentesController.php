@@ -78,30 +78,17 @@ final class OferentesController
     public function listadoOferentes(): void
     {
         Sesion::requerirAutenticacion();
-        $codigoPuesto = Validador::codigoPuesto(filter_input(INPUT_GET, 'codigo_puesto'));
         $pagina = Validador::pagina(filter_input(INPUT_GET, 'pagina'));
 
-        if ($codigoPuesto === null) {
-            render('oferentes/listado', [
-                'title'        => 'Listado de Oferentes',
-                'error'        => 'Debe indicar un código de puesto válido.',
-                'oferentes'    => [],
-                'codigoPuesto' => null,
-                'paginaActual' => 1,
-                'totalPaginas' => 1,
-            ]);
-            return;
-        }
-
         try {
-            $todos = $this->repositorio->listarPorPuesto($codigoPuesto);
+            $todos = $this->repositorio->listarTodos();
         } catch (SoapFault | RuntimeException $exception) {
             error_log($exception->__toString());
-            $this->renderizarListadoConError($codigoPuesto);
+            $this->renderizarListadoConError();
             return;
         } catch (Throwable $exception) {
             error_log($exception->__toString());
-            $this->renderizarListadoConError($codigoPuesto);
+            $this->renderizarListadoConError();
             return;
         }
 
@@ -115,7 +102,6 @@ final class OferentesController
             'title'        => 'Listado de Oferentes',
             'error'        => null,
             'oferentes'    => $oferentesPagina,
-            'codigoPuesto' => $codigoPuesto,
             'paginaActual' => $pagina,
             'totalPaginas' => $totalPaginas,
         ]);
@@ -141,13 +127,12 @@ final class OferentesController
         echo json_encode(['error' => $mensaje], JSON_UNESCAPED_UNICODE);
     }
 
-    private function renderizarListadoConError(string $codigoPuesto): void
+    private function renderizarListadoConError(): void
     {
         render('oferentes/listado', [
             'title' => 'Listado de Oferentes',
-            'error' => 'No fue posible consultar los oferentes para el puesto seleccionado.',
+            'error' => 'No fue posible consultar el listado de oferentes.',
             'oferentes' => [],
-            'codigoPuesto' => $codigoPuesto,
             'paginaActual' => 1,
             'totalPaginas' => 1,
         ]);

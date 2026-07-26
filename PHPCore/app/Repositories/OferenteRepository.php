@@ -30,6 +30,34 @@ final class OferenteRepository
             );
         }
 
+        return $this->mapearOferentes($respuesta);
+    }
+
+    /**
+     * @return array<int, array{id_oferente:int, identificacion:string, nombre_completo:string}>
+     */
+    public function listarTodos(): array
+    {
+        try {
+            $respuesta = $this->servicio()->call('ListarOferentesPorPuesto', [
+                'codigoPuesto' => null,
+            ]);
+        } catch (Throwable $exception) {
+            throw new RuntimeException(
+                'No fue posible consultar el listado de oferentes.',
+                0,
+                $exception
+            );
+        }
+
+        return $this->mapearOferentes($respuesta);
+    }
+
+    /**
+     * @return array<int, array{id_oferente:int, identificacion:string, nombre_completo:string}>
+     */
+    private function mapearOferentes(mixed $respuesta): array
+    {
         return array_map(
             fn (mixed $fila): array => [
                 'id_oferente' => (int) $this->valor($fila, ['IdOferente', 'idOferente', 'id_oferente'], 0),
