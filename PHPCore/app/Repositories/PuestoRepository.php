@@ -14,7 +14,7 @@ final class PuestoRepository
     public function listarActivos(): array
     {
         try {
-            return $this->normalizarLista($this->servicio()->call('ListarPuestosActivos'));
+            return $this->normalizarLista($this->servicio()->call('ListarPuestos'));
         } catch (Throwable $exception) {
             throw new RuntimeException('No fue posible consultar los puestos activos.', 0, $exception);
         }
