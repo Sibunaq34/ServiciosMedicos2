@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 21-07-2026 a las 20:01:53
+-- Tiempo de generación: 27-07-2026 a las 08:36:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -945,6 +945,42 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_concursos_obtener` (IN `pIdConcu
     );
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ConsultarOferentesPorPuesto` (IN `pCodigoPuesto` VARCHAR(50))   BEGIN
+    DECLARE vIdPuesto INT DEFAULT NULL;
+
+    SELECT id_puesto
+      INTO vIdPuesto
+      FROM puestos
+     WHERE codigo_puesto = TRIM(pCodigoPuesto)
+       AND activo = 1
+     LIMIT 1;
+
+    IF vIdPuesto IS NULL THEN
+
+        SELECT
+            CAST(NULL AS SIGNED) AS IdOferente,
+            CAST(NULL AS CHAR(150)) AS NombreCompleto,
+            CAST(NULL AS CHAR(30)) AS Identificacion
+        WHERE 1 = 0;
+
+    ELSE
+
+        SELECT DISTINCT
+            o.id_oferente AS IdOferente,
+            p.nombre_comple AS NombreCompleto,
+            p.identificacion AS Identificacion
+        FROM oferente_puesto AS op
+        INNER JOIN oferentes AS o
+            ON o.id_oferente = op.id_oferente
+        INNER JOIN personas AS p
+            ON p.id_persona = o.id_persona
+        WHERE op.id_puesto = vIdPuesto
+          AND op.estado = 'Postulado'
+        ORDER BY p.nombre_comple ASC;
+
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ContratarEmpleado` (IN `pIdOferente` INT, IN `pIdPuesto` INT, IN `pIdJefatura` INT)   BEGIN
 
     DECLARE vNombre VARCHAR(200);
@@ -1465,13 +1501,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ListarEmpleados` ()   BEGIN
   END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ListarOferentes` ()   BEGIN
-     SELECT
-		o.id_oferente,
-     p.nombre_comple AS nombre_completo
-   FROM Oferentes o
-   INNER JOIN Personas p
-     ON o.id_persona = p.id_persona
-  ORDER BY p.nombre_comple;
+SELECT
+    o.id_oferente AS IdOferente,
+    p.nombre_comple AS NombreCompleto,
+    p.identificacion AS Identificacion
+FROM oferentes o
+INNER JOIN personas p
+    ON p.id_persona = o.id_persona
+ORDER BY p.nombre_comple;
   END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ListarPuestos` ()   BEGIN
@@ -1615,48 +1652,38 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_ObtenerNombreOferente` (IN `p_id
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_ObtenerOferentesPorPuesto` (IN `pCodigoPuesto` VARCHAR(20))   BEGIN
-    DECLARE `vIdPuesto` INT DEFAULT NULL;
+    DECLARE vIdPuesto INT DEFAULT NULL;
 
-    SELECT `id_puesto`
-      INTO `vIdPuesto`
-      FROM `puestos`
-     WHERE `codigo_puesto` = TRIM(`pCodigoPuesto`)
-       AND `activo` = 1
+    SELECT id_puesto
+      INTO vIdPuesto
+      FROM puestos
+     WHERE codigo_puesto = TRIM(pCodigoPuesto)
+       AND activo = 1
      LIMIT 1;
 
-    IF `vIdPuesto` IS NULL THEN
-        -- Mantiene el contrato esperado por Dapper/WCF, pero sin filas.
+    IF vIdPuesto IS NULL THEN
+
         SELECT
-            CAST(NULL AS SIGNED) AS `IdOferente`,
-            CAST(NULL AS CHAR(150)) AS `NombreCompleto`,
-            CAST(NULL AS CHAR(30)) AS `Identificacion`
+            CAST(NULL AS SIGNED) AS IdOferente,
+            CAST(NULL AS CHAR(150)) AS NombreCompleto,
+            CAST(NULL AS CHAR(30)) AS Identificacion
         WHERE 1 = 0;
+
     ELSE
+
         SELECT DISTINCT
-            `o`.`id_oferente` AS `IdOferente`,
-            `p`.`nombre_comple` AS `NombreCompleto`,
-            `p`.`identificacion` AS `Identificacion`
-        FROM `oferente_puesto` AS `op`
-        INNER JOIN `oferentes` AS `o`
-            ON `o`.`id_oferente` = `op`.`id_oferente`
-        INNER JOIN `personas` AS `p`
-            ON `p`.`id_persona` = `o`.`id_persona`
-        WHERE `op`.`id_puesto` = `vIdPuesto`
-          AND `op`.`estado` = 'Postulado'
-          AND NOT EXISTS (
-              SELECT 1
-              FROM `requisitos_puesto` AS `rp`
-              WHERE `rp`.`id_puesto` = `vIdPuesto`
-                AND `rp`.`activo` = 1
-                AND NOT EXISTS (
-                    SELECT 1
-                    FROM `oferente_requisito` AS `ore`
-                    WHERE `ore`.`id_oferente` = `o`.`id_oferente`
-                      AND `ore`.`id_requisito` = `rp`.`id_requisito`
-                      AND `ore`.`cumple` = 1
-                )
-          )
-        ORDER BY `p`.`nombre_comple` ASC;
+            o.id_oferente AS IdOferente,
+            p.nombre_comple AS NombreCompleto,
+            p.identificacion AS Identificacion
+        FROM oferente_puesto op
+        INNER JOIN oferentes o
+            ON o.id_oferente = op.id_oferente
+        INNER JOIN personas p
+            ON p.id_persona = o.id_persona
+        WHERE op.id_puesto = vIdPuesto
+          AND op.estado = 'Postulado'
+        ORDER BY p.nombre_comple ASC;
+
     END IF;
 END$$
 
@@ -3089,7 +3116,9 @@ INSERT INTO `accion_personal` (`id_accion`, `codigo_accion`, `fecha_accion`, `de
 (17, 'CON-15', '2026-07-21', 'Contratación de empleado', 15, NULL, '2026-07-21', NULL, 1),
 (18, 'CON-16', '2026-07-21', 'Contratación de empleado', 16, NULL, '2026-07-21', NULL, 1),
 (19, 'CON-17', '2026-07-21', 'Contratación de empleado', 17, NULL, '2026-07-21', NULL, 1),
-(20, 'CON-18', '2026-07-21', 'Contratación de empleado', 18, NULL, '2026-07-21', NULL, 1);
+(20, 'CON-18', '2026-07-21', 'Contratación de empleado', 18, NULL, '2026-07-21', NULL, 1),
+(21, 'CON-19', '2026-07-26', 'Contratación de empleado', 19, NULL, '2026-07-26', NULL, 1),
+(22, 'CON-20', '2026-07-27', 'Contratación de empleado', 20, NULL, '2026-07-27', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -3127,14 +3156,16 @@ CREATE TABLE `bitacoras` (
   `id_usuario` int(11) NOT NULL,
   `accion` varchar(50) NOT NULL,
   `descripcionAccion` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `bitacoras`
 --
 
 INSERT INTO `bitacoras` (`id_bitacoras`, `fecha_bitacora`, `id_usuario`, `accion`, `descripcionAccion`) VALUES
-(1, '2026-07-20 23:28:39', 2, 'Crear AUT3', '{\"mensaje\": \"Se registra oferente publico para puesto\", \"registro\": {\"idPersona\": \"13\", \"idOferente\": \"13\", \"idPuesto\": \"2\", \"idOferentePuesto\": \"9\", \"identificacion\": \"305280498\", \"tipoIdentificacion\": \"CedulaIdentidad\", \"nombreCompleto\": \"Antony Cervantes Calderon\", \"codigoPuesto\": \"RH-COOR\", \"nombrePuesto\": \"Coordinador de Recursos Humanos\", \"correos\": [\"antonny22c.c@gmail.com\"], \"telefonos\": [\"63368175\"], \"curriculum\": {\"ruta\": \"aut3-curriculums/aut3_20260721_052839_aaf495e007cf09e9.pdf\", \"nombre\": \"Resumen_Antony_Cervantes.pdf\", \"mime\": \"application/pdf\", \"tamanio\": \"207583\"}}}');
+(1, '2026-07-20 23:28:39', 2, 'Crear AUT3', '{\"mensaje\": \"Se registra oferente publico para puesto\", \"registro\": {\"idPersona\": \"13\", \"idOferente\": \"13\", \"idPuesto\": \"2\", \"idOferentePuesto\": \"9\", \"identificacion\": \"305280498\", \"tipoIdentificacion\": \"CedulaIdentidad\", \"nombreCompleto\": \"Antony Cervantes Calderon\", \"codigoPuesto\": \"RH-COOR\", \"nombrePuesto\": \"Coordinador de Recursos Humanos\", \"correos\": [\"antonny22c.c@gmail.com\"], \"telefonos\": [\"63368175\"], \"curriculum\": {\"ruta\": \"aut3-curriculums/aut3_20260721_052839_aaf495e007cf09e9.pdf\", \"nombre\": \"Resumen_Antony_Cervantes.pdf\", \"mime\": \"application/pdf\", \"tamanio\": \"207583\"}}}'),
+(2, '2026-07-26 21:28:05', 2, 'Crear AUT3', '{\"mensaje\": \"Se registra oferente publico para puesto\", \"registro\": {\"idPersona\": \"14\", \"idOferente\": \"14\", \"idPuesto\": \"6\", \"idOferentePuesto\": \"10\", \"identificacion\": \"305280499\", \"tipoIdentificacion\": \"CedulaIdentidad\", \"nombreCompleto\": \"ANTONY CERVANTES C\", \"codigoPuesto\": \"ADM-ASI\", \"nombrePuesto\": \"Asistente Administrativo\", \"correos\": [\"GEOVANNY22C.C@GMAIL.COM\"], \"telefonos\": [\"62494245\"], \"curriculum\": {\"ruta\": \"aut3-curriculums/aut3_20260727_032805_d37e1be48c35da92.pdf\", \"nombre\": \"Resumen_Antony_Cervantes.pdf\", \"mime\": \"application/pdf\", \"tamanio\": \"207583\"}}}'),
+(3, '2026-07-26 23:34:45', 2, 'Crear AUT3', '{\"mensaje\": \"Se registra oferente publico para puesto\", \"registro\": {\"idPersona\": \"15\", \"idOferente\": \"15\", \"idPuesto\": \"2\", \"idOferentePuesto\": \"11\", \"identificacion\": \"305280422\", \"tipoIdentificacion\": \"CedulaIdentidad\", \"nombreCompleto\": \"Geovany Cervantes Calderon\", \"codigoPuesto\": \"RH-COOR\", \"nombrePuesto\": \"Coordinador de Recursos Humanos\", \"correos\": [\"mastersibunaq34@gmail.com\"], \"telefonos\": [\"63368175\"], \"curriculum\": {\"ruta\": \"aut3-curriculums/aut3_20260727_053445_914c608940916030.pdf\", \"nombre\": \"CV_Antony_Cervantes.pdf\", \"mime\": \"application/pdf\", \"tamanio\": \"187718\"}}}');
 
 -- --------------------------------------------------------
 
@@ -3303,7 +3334,9 @@ INSERT INTO `empleados` (`id_empleado`, `numero_empleado`, `id_oferente`, `fecha
 (15, 'EMP-20260721021648', 10, '2026-07-21', 'Ricardo Antonio López Marín', 'P87654321', 'Pasaporte', 7, '2026-07-21', 'activo', NULL, NULL),
 (16, 'EMP-20260721021937', 8, '2026-07-21', 'José Pablo Quesada Brenes', '402780123', 'CedulaIdentidad', 5, '2026-07-21', 'activo', NULL, NULL),
 (17, 'EMP-20260721022002', 6, '2026-07-21', 'Gabriel Esteban Rojas Méndez', 'P12345678', 'Pasaporte', 3, '2026-07-21', 'activo', NULL, NULL),
-(18, 'EMP-20260721022110', 7, '2026-07-21', 'Natalia Fernanda Chaves Mora', '205670432', 'CedulaIdentidad', 4, '2026-07-21', 'activo', NULL, NULL);
+(18, 'EMP-20260721022110', 7, '2026-07-21', 'Natalia Fernanda Chaves Mora', '205670432', 'CedulaIdentidad', 4, '2026-07-21', 'activo', NULL, NULL),
+(19, 'EMP-20260726233755', 15, '2026-07-26', 'Geovany Cervantes Calderon', '305280422', 'CedulaIdentidad', 2, '2026-07-26', 'activo', NULL, NULL),
+(20, 'EMP-20260727000034', 13, '2026-07-27', 'Antony Cervantes Calderon', '305280498', 'CedulaIdentidad', 2, '2026-07-27', 'activo', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3425,7 +3458,9 @@ INSERT INTO `oferentes` (`id_oferente`, `id_persona`, `fecha_regis`) VALUES
 (10, 10, '2026-07-11 14:35:00'),
 (11, 11, '2026-07-14 08:50:00'),
 (12, 12, '2026-07-18 16:15:00'),
-(13, 13, '2026-07-20 23:28:39');
+(13, 13, '2026-07-20 23:28:39'),
+(14, 14, '2026-07-26 21:28:05'),
+(15, 15, '2026-07-26 23:34:45');
 
 -- --------------------------------------------------------
 
@@ -3487,7 +3522,9 @@ INSERT INTO `oferente_correo` (`id_of_correo`, `id_oferente`, `correo`) VALUES
 (11, 10, 'ricardo.lopez@correo.test'),
 (12, 11, 'maria.arce@correo.test'),
 (13, 12, 'carlos.mora@correo.test'),
-(14, 13, 'antonny22c.c@gmail.com');
+(14, 13, 'antonny22c.c@gmail.com'),
+(15, 14, 'GEOVANNY22C.C@GMAIL.COM'),
+(16, 15, 'mastersibunaq34@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -3520,7 +3557,9 @@ INSERT INTO `oferente_puesto` (`id_oferente_puesto`, `id_oferente`, `id_puesto`,
 (6, 10, 7, '2026-07-11 14:45:00', 'Postulado', 'uploads/curriculum/cv_ricardo_lopez.pdf', 'cv_ricardo_lopez.pdf', 'application/pdf', 205824),
 (7, 11, 6, '2026-07-14 09:00:00', 'Postulado', 'uploads/curriculum/cv_maria_arce.pdf', 'cv_maria_arce.pdf', 'application/pdf', 157696),
 (8, 12, 2, '2026-07-18 16:30:00', 'Postulado', 'uploads/curriculum/cv_carlos_mora.pdf', 'cv_carlos_mora.pdf', 'application/pdf', 221184),
-(9, 13, 2, '2026-07-20 23:28:39', 'Postulado', 'aut3-curriculums/aut3_20260721_052839_aaf495e007cf09e9.pdf', 'Resumen_Antony_Cervantes.pdf', 'application/pdf', 207583);
+(9, 13, 2, '2026-07-20 23:28:39', 'Postulado', 'aut3-curriculums/aut3_20260721_052839_aaf495e007cf09e9.pdf', 'Resumen_Antony_Cervantes.pdf', 'application/pdf', 207583),
+(10, 14, 6, '2026-07-26 21:28:05', 'Postulado', 'aut3-curriculums/aut3_20260727_032805_d37e1be48c35da92.pdf', 'Resumen_Antony_Cervantes.pdf', 'application/pdf', 207583),
+(11, 15, 2, '2026-07-26 23:34:45', 'Postulado', 'aut3-curriculums/aut3_20260727_053445_914c608940916030.pdf', 'CV_Antony_Cervantes.pdf', 'application/pdf', 187718);
 
 -- --------------------------------------------------------
 
@@ -3590,7 +3629,9 @@ INSERT INTO `oferente_telf` (`id_of_telefono`, `id_oferente`, `telefono`) VALUES
 (11, 10, '88881010'),
 (12, 11, '88881011'),
 (13, 12, '88881012'),
-(14, 13, '63368175');
+(14, 13, '63368175'),
+(15, 14, '62494245'),
+(16, 15, '63368175');
 
 -- --------------------------------------------------------
 
@@ -3691,7 +3732,9 @@ INSERT INTO `personas` (`id_persona`, `identificacion`, `tipo_identificacion`, `
 (10, 'P87654321', 'Pasaporte', 'Ricardo Antonio López Marín', '1989-11-28', 'Oferente'),
 (11, '603450987', 'CedulaIdentidad', 'María José Arce Salazar', '2000-03-07', 'Oferente'),
 (12, '118760945', 'CedulaIdentidad', 'Carlos Andrés Mora Solano', '1991-08-19', 'Oferente'),
-(13, '305280498', 'CedulaIdentidad', 'Antony Cervantes Calderon', '2000-11-12', 'Oferente');
+(13, '305280498', 'CedulaIdentidad', 'Antony Cervantes Calderon', '2000-11-12', 'Oferente'),
+(14, '305280499', 'CedulaIdentidad', 'ANTONY CERVANTES C', '2000-11-12', 'Oferente'),
+(15, '305280422', 'CedulaIdentidad', 'Geovany Cervantes Calderon', '2000-11-12', 'Oferente');
 
 -- --------------------------------------------------------
 
@@ -3929,7 +3972,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `usuario`, `contrasena`, `activo`, `fecha_modifi`, `fecha_access`, `nombre_completo`, `correo`, `estado`, `intentos_fallidos`) VALUES
-(1, 'Admin', 'GCM:A7BgGuXsJmU/wr6FOhkvQQBjIKE+7eIK6Jz3NSowyehGpNypw9I=', 1, '2026-07-20 14:35:40', '2026-07-21 01:39:43', 'Antony Cervantes Calderon', 'antony22c.c@gmail.com', 'Activo', 0),
+(1, 'Admin', 'GCM:A7BgGuXsJmU/wr6FOhkvQQBjIKE+7eIK6Jz3NSowyehGpNypw9I=', 1, '2026-07-20 14:35:40', '2026-07-27 00:29:47', 'Antony Cervantes Calderon', 'antony22c.c@gmail.com', 'Activo', 0),
 (2, 'AUT_PUBLICO', '5b8f2a74c4a3a21f8d9eb59ccd343bbf139b286335ef84ec103564035cab0e9a', 0, '2026-07-20 16:07:21', NULL, 'Usuario tecnico publico AUT3', NULL, 'Inactivo', 0),
 (3, 'Admin2', 'GCM:1tJ7hlA1EPkHjF/2kpsdiXFaexKVW/O1xWtEwB7CwY8g/JxgvlY=', 0, '2026-07-20 23:48:33', '2026-07-20 23:48:13', 'Roberto ', 'adsas@sa.com', 'Bloqueado', 3);
 
@@ -4146,7 +4189,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `accion_personal`
 --
 ALTER TABLE `accion_personal`
-  MODIFY `id_accion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_accion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `admin_area`
@@ -4158,7 +4201,7 @@ ALTER TABLE `admin_area`
 -- AUTO_INCREMENT de la tabla `bitacoras`
 --
 ALTER TABLE `bitacoras`
-  MODIFY `id_bitacoras` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_bitacoras` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `canton`
@@ -4188,7 +4231,7 @@ ALTER TABLE `distrito`
 -- AUTO_INCREMENT de la tabla `empleados`
 --
 ALTER TABLE `empleados`
-  MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `entrevistas`
@@ -4212,7 +4255,7 @@ ALTER TABLE `institu_educa`
 -- AUTO_INCREMENT de la tabla `oferentes`
 --
 ALTER TABLE `oferentes`
-  MODIFY `id_oferente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_oferente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `oferente_concur`
@@ -4224,19 +4267,19 @@ ALTER TABLE `oferente_concur`
 -- AUTO_INCREMENT de la tabla `oferente_correo`
 --
 ALTER TABLE `oferente_correo`
-  MODIFY `id_of_correo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_of_correo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `oferente_puesto`
 --
 ALTER TABLE `oferente_puesto`
-  MODIFY `id_oferente_puesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_oferente_puesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `oferente_telf`
 --
 ALTER TABLE `oferente_telf`
-  MODIFY `id_of_telefono` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_of_telefono` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `pantallas`
@@ -4254,7 +4297,7 @@ ALTER TABLE `parametros`
 -- AUTO_INCREMENT de la tabla `personas`
 --
 ALTER TABLE `personas`
-  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `prepara_academica`
