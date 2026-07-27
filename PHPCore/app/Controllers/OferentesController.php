@@ -78,10 +78,15 @@ final class OferentesController
     public function listadoOferentes(): void
     {
         Sesion::requerirAutenticacion();
+        $codigoPuesto = Validador::codigoPuesto(filter_input(INPUT_GET, 'codigo_puesto'));
         $pagina = Validador::pagina(filter_input(INPUT_GET, 'pagina'));
 
         try {
-            $todos = $this->repositorio->listarTodos();
+            if ($codigoPuesto !== null) {
+                $todos = $this->repositorio->listarPorPuesto($codigoPuesto);
+            } else {
+                $todos = $this->repositorio->listarTodos();
+            }
         } catch (SoapFault | RuntimeException $exception) {
             error_log($exception->__toString());
             $this->renderizarListadoConError();
@@ -99,9 +104,12 @@ final class OferentesController
         $oferentesPagina = array_slice($todos, ($pagina - 1) * self::TAMANO_PAGINA, self::TAMANO_PAGINA);
 
         render('oferentes/listado', [
-            'title'        => 'Listado de Oferentes',
+            'title'        => $codigoPuesto !== null
+                ? sprintf('Listado de Oferentes - Puesto %s', $codigoPuesto)
+                : 'Listado de Oferentes',
             'error'        => null,
             'oferentes'    => $oferentesPagina,
+            'codigoPuesto' => $codigoPuesto,
             'paginaActual' => $pagina,
             'totalPaginas' => $totalPaginas,
         ]);

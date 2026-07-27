@@ -41,7 +41,7 @@
                         <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
                         <li class="page-item<?= $i === $paginaActual ? ' active' : '' ?>">
                             <a class="page-link"
-                               href="<?= e(url('listado-oferentes', ['pagina' => $i])) ?>">
+                               href="<?= e(url('listado-oferentes', array_filter(['codigo_puesto' => $codigoPuesto, 'pagina' => $i]))) ?>">
                                 <?= $i ?>
                             </a>
                         </li>

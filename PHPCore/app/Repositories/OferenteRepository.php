@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 namespace App\Repositories;
-
 use App\Config\WebService;
 use App\Core\SoapService;
 use RuntimeException;
@@ -39,7 +38,7 @@ final class OferenteRepository
     public function listarTodos(): array
     {
         try {
-            $respuesta = $this->servicio()->call('ListarOferentesPorPuesto', [
+            $respuesta = $this->servicio()->call('ListarTodosLosOferentes', [
                 'codigoPuesto' => null,
             ]);
         } catch (Throwable $exception) {
@@ -95,6 +94,7 @@ final class OferenteRepository
     private function normalizarOferentes(mixed $respuesta): array
     {
         $respuesta = $this->extraer($respuesta, 'ListarOferentesPorPuestoResult');
+        $respuesta = $this->extraer($respuesta, 'ListarTodosLosOferentesResult');
         $respuesta = $this->extraer($respuesta, 'OferenteCumplimientoDto');
 
         if ($respuesta === null || $respuesta === [] || (is_object($respuesta) && get_object_vars($respuesta) === [])) {
