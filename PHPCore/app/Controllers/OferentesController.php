@@ -31,7 +31,7 @@ final class OferentesController
         if ($codigoPuesto === null) {
             if ($aceptaHtml) {
                 render('oferentes/servicio', [
-                    'title'        => 'Oferentes por Puesto (CORE2)',
+                    'title'        => 'Oferentes por Puesto',
                     'error'        => 'El parámetro codigo_puesto es requerido y debe ser válido.',
                     'oferentes'    => [],
                     'codigoPuesto' => null,
@@ -81,27 +81,19 @@ final class OferentesController
         $codigoPuesto = Validador::codigoPuesto(filter_input(INPUT_GET, 'codigo_puesto'));
         $pagina = Validador::pagina(filter_input(INPUT_GET, 'pagina'));
 
-        if ($codigoPuesto === null) {
-            render('oferentes/listado', [
-                'title'        => 'Listado de Oferentes',
-                'error'        => 'Debe indicar un código de puesto válido.',
-                'oferentes'    => [],
-                'codigoPuesto' => null,
-                'paginaActual' => 1,
-                'totalPaginas' => 1,
-            ]);
-            return;
-        }
-
         try {
-            $todos = $this->repositorio->listarPorPuesto($codigoPuesto);
+            if ($codigoPuesto !== null) {
+                $todos = $this->repositorio->listarPorPuesto($codigoPuesto);
+            } else {
+                $todos = $this->repositorio->listarTodos();
+            }
         } catch (SoapFault | RuntimeException $exception) {
             error_log($exception->__toString());
-            $this->renderizarListadoConError($codigoPuesto);
+            $this->renderizarListadoConError();
             return;
         } catch (Throwable $exception) {
             error_log($exception->__toString());
-            $this->renderizarListadoConError($codigoPuesto);
+            $this->renderizarListadoConError();
             return;
         }
 
@@ -112,7 +104,9 @@ final class OferentesController
         $oferentesPagina = array_slice($todos, ($pagina - 1) * self::TAMANO_PAGINA, self::TAMANO_PAGINA);
 
         render('oferentes/listado', [
-            'title'        => 'Listado de Oferentes',
+            'title'        => $codigoPuesto !== null
+                ? sprintf('Listado de Oferentes - Puesto %s', $codigoPuesto)
+                : 'Listado de Oferentes',
             'error'        => null,
             'oferentes'    => $oferentesPagina,
             'codigoPuesto' => $codigoPuesto,
@@ -141,13 +135,12 @@ final class OferentesController
         echo json_encode(['error' => $mensaje], JSON_UNESCAPED_UNICODE);
     }
 
-    private function renderizarListadoConError(string $codigoPuesto): void
+    private function renderizarListadoConError(): void
     {
         render('oferentes/listado', [
             'title' => 'Listado de Oferentes',
-            'error' => 'No fue posible consultar los oferentes para el puesto seleccionado.',
+            'error' => 'No fue posible consultar el listado de oferentes.',
             'oferentes' => [],
-            'codigoPuesto' => $codigoPuesto,
             'paginaActual' => 1,
             'totalPaginas' => 1,
         ]);

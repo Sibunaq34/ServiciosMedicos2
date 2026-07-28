@@ -7,8 +7,6 @@ namespace App\Controllers;
 use App\Core\Sesion;
 use App\Core\Validador;
 use App\Repositories\PuestoRepository;
-use RuntimeException;
-use SoapFault;
 use Throwable;
 
 final class PuestosController
@@ -32,7 +30,8 @@ final class PuestosController
             usort($todos, static fn (array $a, array $b): int =>
                 strcasecmp($a['nombrePuesto'], $b['nombrePuesto'])
             );
-            $totalPaginas = max(1, (int) ceil(count($todos) / self::TAMANO_PAGINA));
+            $totalRegistros = count($todos);
+            $totalPaginas = max(1, (int) ceil($totalRegistros / self::TAMANO_PAGINA));
             $pagina = min($pagina, $totalPaginas);
             $puestos = array_slice(
                 $todos,
@@ -40,18 +39,13 @@ final class PuestosController
                 self::TAMANO_PAGINA
             );
             $error = null;
-        } catch (SoapFault | RuntimeException $exception) {
-            error_log($exception->__toString());
-            $puestos = [];
-            $totalPaginas = 1;
-            $pagina = 1;
-            $error = 'No fue posible consultar los puestos activos.';
         } catch (Throwable $exception) {
             error_log($exception->__toString());
             $puestos = [];
             $totalPaginas = 1;
+            $totalRegistros = 0;
             $pagina = 1;
-            $error = 'No fue posible consultar los puestos activos.';
+            $error = 'No fue posible obtener los puestos activos. Verifique que el servicio se encuentre disponible e intente nuevamente.';
         }
 
         render('puestos', [
@@ -60,6 +54,7 @@ final class PuestosController
             'error' => $error,
             'paginaActual' => $pagina,
             'totalPaginas' => $totalPaginas,
+            'totalRegistros' => $totalRegistros,
         ]);
     }
 }

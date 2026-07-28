@@ -3,15 +3,14 @@
 declare(strict_types=1);
 
 namespace App\Repositories;
-
 use App\Config\WebService;
-use App\Core\ServicioSoap;
+use App\Core\SoapService;
 use RuntimeException;
 use Throwable;
 
 final class OferenteRepository
 {
-    private ?ServicioSoap $soap = null;
+    private ?SoapService $soap = null;
 
     /**
      * @return array<int, array{id_oferente:int, identificacion:string, nombre_completo:string}>
@@ -30,6 +29,34 @@ final class OferenteRepository
             );
         }
 
+        return $this->mapearOferentes($respuesta);
+    }
+
+    /**
+     * @return array<int, array{id_oferente:int, identificacion:string, nombre_completo:string}>
+     */
+    public function listarTodos(): array
+    {
+        try {
+            $respuesta = $this->servicio()->call('ListarTodosLosOferentes', [
+                'codigoPuesto' => null,
+            ]);
+        } catch (Throwable $exception) {
+            throw new RuntimeException(
+                'No fue posible consultar el listado de oferentes.',
+                0,
+                $exception
+            );
+        }
+
+        return $this->mapearOferentes($respuesta);
+    }
+
+    /**
+     * @return array<int, array{id_oferente:int, identificacion:string, nombre_completo:string}>
+     */
+    private function mapearOferentes(mixed $respuesta): array
+    {
         return array_map(
             fn (mixed $fila): array => [
                 'id_oferente' => (int) $this->valor($fila, ['IdOferente', 'idOferente', 'id_oferente'], 0),
@@ -59,14 +86,15 @@ final class OferenteRepository
     }
 
 
-    private function servicio(): ServicioSoap
+    private function servicio(): SoapService
     {
-        return $this->soap ??= new ServicioSoap(WebService::OFERENTES);
+        return $this->soap ??= new SoapService(WebService::OFERENTES);
     }
 
     private function normalizarOferentes(mixed $respuesta): array
     {
         $respuesta = $this->extraer($respuesta, 'ListarOferentesPorPuestoResult');
+        $respuesta = $this->extraer($respuesta, 'ListarTodosLosOferentesResult');
         $respuesta = $this->extraer($respuesta, 'OferenteCumplimientoDto');
 
         if ($respuesta === null || $respuesta === [] || (is_object($respuesta) && get_object_vars($respuesta) === [])) {

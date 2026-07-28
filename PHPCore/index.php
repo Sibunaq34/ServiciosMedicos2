@@ -34,10 +34,6 @@ try {
         'procesar-login' => $loginController->procesarLogin(),
         'logout' => $loginController->logout(),
         'puestos' => $puestosController->index(),
-        'puestos-crear' => $puestosController->crear(),
-        'puestos-consultar' => $puestosController->consultar(),
-        'puestos-editar' => $puestosController->editar(),
-        'puestos-estado' => $puestosController->cambiarEstado(),
         'detalle-oferente-core8' => $detalleOferenteController->detalle(),
         'detalle-oferente', 'detalleOferente' =>
             $contratacionController->detalleOferente(),
