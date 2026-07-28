@@ -31,7 +31,7 @@ final class OferentesController
         if ($codigoPuesto === null) {
             if ($aceptaHtml) {
                 render('oferentes/servicio', [
-                    'title'        => 'Oferentes por Puesto (CORE2)',
+                    'title'        => 'Oferentes por Puesto',
                     'error'        => 'El parámetro codigo_puesto es requerido y debe ser válido.',
                     'oferentes'    => [],
                     'codigoPuesto' => null,

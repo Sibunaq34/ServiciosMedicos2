@@ -203,3 +203,56 @@
         width: 100%;
     }
 }
+
+.aut3-field-full label {
+    color: CanvasText;
+    font-weight: 700;
+}
+
+.aut3-field-full input[readonly] {
+    color: CanvasText;
+    font-weight: 700;
+}
+
+.aut3-button {
+    min-height: 2.75rem;
+    border: 1px solid currentColor;
+    border-radius: 100px;
+    padding: .65rem 1.25rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color .15s ease-in-out,
+        color .15s ease-in-out,
+        border-color .15s ease-in-out,
+        opacity .15s ease-in-out;
+}
+
+.aut3-button-primary {
+    background: var(--wp--preset--color--accent-5, #fbfaf3);
+    color: var(--wp--preset--color--contrast, CanvasText);
+    border-color: currentColor;
+}
+
+.aut3-button-secondary {
+    background: Canvas;
+    color: CanvasText;
+    border-color: currentColor;
+}
+
+.aut3-button:hover,
+.aut3-button:focus-visible {
+    opacity: .85;
+}
+
+.aut3-button:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.aut3-button:disabled,
+.aut3-button[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: .6;
+}
