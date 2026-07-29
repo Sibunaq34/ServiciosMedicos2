@@ -672,6 +672,7 @@ footer {
 }
 
 .table-shell .card {
+    display: inline-block;
     width: auto;
     max-width: 100%;
 }
