@@ -1,0 +1,5 @@
+[18-Aug-2026 22:18:16 UTC] PHP Warning:  mysqli_real_connect(): (HY000/1045): Access denied for user 'tiusr15cp_Sitios'@'localhost' (using password: YES) in C:\xampp\htdocs\ServiciosMedicos2\PHPAut\wp-includes\class-wpdb.php on line 1994
+[18-Aug-2026 22:18:48 UTC] PHP Warning:  mysqli_real_connect(): (HY000/1045): Access denied for user 'Sitios'@'localhost' (using password: YES) in C:\xampp\htdocs\ServiciosMedicos2\PHPAut\wp-includes\class-wpdb.php on line 1994
+[18-Aug-2026 22:18:50 UTC] PHP Warning:  mysqli_real_connect(): (HY000/1045): Access denied for user 'Sitios'@'localhost' (using password: YES) in C:\xampp\htdocs\ServiciosMedicos2\PHPAut\wp-includes\class-wpdb.php on line 1994
+[18-Aug-2026 22:18:52 UTC] PHP Warning:  mysqli_real_connect(): (HY000/1045): Access denied for user 'Sitios'@'localhost' (using password: YES) in C:\xampp\htdocs\ServiciosMedicos2\PHPAut\wp-includes\class-wpdb.php on line 1994
+[18-Aug-2026 22:18:53 UTC] PHP Warning:  mysqli_real_connect(): (HY000/1045): Access denied for user 'Sitios'@'localhost' (using password: YES) in C:\xampp\htdocs\ServiciosMedicos2\PHPAut\wp-includes\class-wpdb.php on line 1994

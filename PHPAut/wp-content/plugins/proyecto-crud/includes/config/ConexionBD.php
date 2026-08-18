@@ -12,11 +12,11 @@ class ConexionBD
     {
         if (self::$conexion === null) {
 
-            $host = "localhost";
-            $puerto = "3307"; 
-            $baseDatos = "servicios";
-            $usuario = "root";
-            $password = "";
+            $host = 'elegant-perlman.138-59-135-33.plesk.page';
+            $puerto = "3306"; 
+            $baseDatos = "Servicios";
+            $usuario = "Sibuna2";
+            $password = "Sibu1234.";
 
             $dsn = "mysql:host=$host;port=$puerto;dbname=$baseDatos;charset=utf8mb4";
 
